@@ -22,3 +22,6 @@ captures/
 
 # OS files
 .DS_Store
+
+# AI Assistant instructions (local only)
+.ai/
