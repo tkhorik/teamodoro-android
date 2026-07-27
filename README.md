@@ -8,15 +8,40 @@ Teamodoro for Android is a high-performance productivity client designed to stay
 
 ## Core Sync Specification
 
-The Android client uses a local-first timing model. By using `System.currentTimeMillis()` and a shared UTC offset, the app keeps its state aligned with the macOS and iOS versions without constant server polling.
+The Android client implements the same algorithm as the reference web client,
+[BaseSecrete/teamodoro](https://github.com/BaseSecrete/teamodoro), which defines
+the cycle as a predicate over wall-clock minutes:
+
+```js
+// javascripts/teamodoro.js
+inBreak: function() {
+  var minutes = this.getDate().getMinutes();
+  return (minutes >= 25 && minutes <= 29) || (minutes >= 55 && minutes <= 59);
+}
+```
+
+That is a **30-minute cycle: 25 minutes focus, then 5 minutes break**, twice an
+hour, with boundaries at `:00`, `:25`, `:30` and `:55`.
 
 ```kotlin
-val cycleMillis = 130 * 60 * 1000L
-val currentTime = System.currentTimeMillis()
-val roomOffset = database.getRoomOffset()
-val elapsed = currentTime - roomOffset
-val position = elapsed % cycleMillis
+val position = System.currentTimeMillis().mod(30 * 60 * 1000L)
+val phase = if (position < 25 * 60 * 1000L) WORK else BREAK
 ```
+
+**There is no offset, no room and no server.** Because 30 divides 60 evenly, the
+phase boundaries land on the same wall-clock instants for everyone, so any two
+clients with a correct clock are synchronised for free. That implicit
+synchronisation *is* the algorithm — anything persisted would only be something
+that could drift out of agreement.
+
+### Divergence from the reference
+
+The reference reads local `getMinutes()`; this client takes the modulo of epoch
+millis instead, which keeps the domain layer free of timezone and DST handling.
+The two agree in every timezone whose UTC offset is a whole or half hour. In the
+handful of 45-minute zones (Nepal, Chatham Islands) this client's boundaries sit
+15 minutes away from the website's. This is deliberate; raise an issue if it
+matters to you.
 
 ## Platform Features
 
@@ -37,8 +62,12 @@ val position = elapsed % cycleMillis
 | Language | Kotlin 2.1+ |
 | UI Framework | Jetpack Compose |
 | Asynchrony | Kotlin Coroutines & Flow |
-| Database | Room |
-| DI | Hilt or Koin |
+| Persistence | SharedPreferences (one boolean — see below) |
+| DI | Hilt |
+
+The only durable state is whether the user has switched notifications on. The
+cycle itself is derived from the clock and needs no storage, so there is no
+database, no schema and no migration path to maintain.
 
 ## Confidentiality
 

@@ -26,12 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.teamodoro.domain.TimerPhase
 import com.teamodoro.domain.TimerState
-import com.teamodoro.domain.WORK_DURATION_MILLIS
 import com.teamodoro.ui.theme.TeamodoroTheme
 
 @Composable
 fun TimerScreen(
     state: TimerState,
+    isTracking: Boolean,
     onStart: () -> Unit,
     onStop: () -> Unit,
     modifier: Modifier = Modifier,
@@ -56,7 +56,7 @@ fun TimerScreen(
             Spacer(modifier = Modifier.height(48.dp))
 
             ControlButtons(
-                isRunning = state.isRunning,
+                isTracking = isTracking,
                 onStart = onStart,
                 onStop = onStop,
             )
@@ -110,17 +110,19 @@ private fun TimerRing(state: TimerState) {
 
 @Composable
 private fun ControlButtons(
-    isRunning: Boolean,
+    isTracking: Boolean,
     onStart: () -> Unit,
     onStop: () -> Unit,
 ) {
-    if (isRunning) {
+    // The cycle runs whether or not this device is watching it, so these
+    // buttons control the notifications and the tile, not the timer itself.
+    if (isTracking) {
         OutlinedButton(onClick = onStop) {
-            Text("Stop Timer")
+            Text("Stop notifications")
         }
     } else {
         Button(onClick = onStart) {
-            Text("Start Timer")
+            Text("Notify me at each phase")
         }
     }
 }
@@ -139,10 +141,10 @@ private fun TimerScreenWorkPreview() {
         TimerScreen(
             state = TimerState(
                 phase = TimerPhase.WORK,
-                remainingMillis = 72 * 60 * 1000L,
-                cyclePosition = 28 * 60 * 1000L,
-                isRunning = true,
+                remainingMillis = 17 * 60 * 1000L,
+                cyclePosition = 8 * 60 * 1000L,
             ),
+            isTracking = true,
             onStart = {},
             onStop = {},
         )
@@ -156,10 +158,10 @@ private fun TimerScreenBreakPreview() {
         TimerScreen(
             state = TimerState(
                 phase = TimerPhase.BREAK,
-                remainingMillis = 20 * 60 * 1000L,
-                cyclePosition = 110 * 60 * 1000L,
-                isRunning = true,
+                remainingMillis = 3 * 60 * 1000L,
+                cyclePosition = 27 * 60 * 1000L,
             ),
+            isTracking = false,
             onStart = {},
             onStop = {},
         )

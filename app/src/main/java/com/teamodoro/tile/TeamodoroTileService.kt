@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import com.teamodoro.data.RoomRepository
+import com.teamodoro.data.TimerPreferences
 import com.teamodoro.domain.CalculateTimerUseCase
 import com.teamodoro.domain.TimerPhase
 import com.teamodoro.domain.TimerState
@@ -25,6 +25,9 @@ class TeamodoroTileService : TileService() {
 
     @Inject
     lateinit var calculateTimerUseCase: CalculateTimerUseCase
+
+    @Inject
+    lateinit var preferences: TimerPreferences
 
     private var tileScope: CoroutineScope? = null
     private var timerJob: Job? = null
@@ -79,7 +82,9 @@ class TeamodoroTileService : TileService() {
         } else {
             tile.label = "$phaseLabel · $timeText"
         }
-        tile.state = if (state.isRunning) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
+        // The cycle always runs, so ACTIVE reflects whether this device is
+        // tracking it — not whether a timer is going.
+        tile.state = if (preferences.isTracking) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
         tile.updateTile()
     }
 

@@ -2,9 +2,10 @@ package com.teamodoro.ui
 
 import android.content.Context
 import android.content.Intent
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teamodoro.data.RoomRepository
+import com.teamodoro.data.TimerPreferences
 import com.teamodoro.domain.CalculateTimerUseCase
 import com.teamodoro.domain.TimerState
 import com.teamodoro.service.TimerService
@@ -13,14 +14,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TimerViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val repository: RoomRepository,
-    private val calculateTimerUseCase: CalculateTimerUseCase,
+    calculateTimerUseCase: CalculateTimerUseCase,
+    preferences: TimerPreferences,
 ) : ViewModel() {
 
     val timerState: StateFlow<TimerState> = calculateTimerUseCase
@@ -28,35 +28,31 @@ class TimerViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = TimerState.DEFAULT,
+            // Seed from the clock, not TimerState.DEFAULT — otherwise the first
+            // frame shows "Focus 25:00" regardless of the real phase.
+            initialValue = calculateTimerUseCase.calculate(System.currentTimeMillis()),
         )
 
-    fun startTimer() {
+    /**
+     * Whether this device is tracking the cycle (foreground service + ongoing
+     * notification). The cycle itself always runs; this only controls whether
+     * we are following along.
+     */
+    val isTracking: StateFlow<Boolean> = preferences.isTrackingFlow
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = preferences.isTracking,
+        )
+
+    fun startTimer() = sendToService(TimerService.ACTION_START)
+
+    fun stopTimer() = sendToService(TimerService.ACTION_STOP)
+
+    private fun sendToService(serviceAction: String) {
         val intent = Intent(context, TimerService::class.java).apply {
-            action = TimerService.ACTION_START
+            action = serviceAction
         }
-        context.startService(intent)
-    }
-
-    fun stopTimer() {
-        val intent = Intent(context, TimerService::class.java).apply {
-            action = TimerService.ACTION_STOP
-        }
-        context.startService(intent)
-    }
-
-    /** Sets the UTC offset received from the server/team room, persisting it locally. */
-    fun setRoomOffset(offsetMillis: Long) {
-        viewModelScope.launch {
-            repository.updateOffset(offsetMillis)
-        }
-    }
-
-    /** Sets the room ID, then starts the timer. */
-    fun joinRoom(roomId: String, offsetMillis: Long) {
-        viewModelScope.launch {
-            repository.saveRoomConfig(roomId, offsetMillis)
-            startTimer()
-        }
+        ContextCompat.startForegroundService(context, intent)
     }
 }
