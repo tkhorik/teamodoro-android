@@ -1,10 +1,17 @@
 package com.teamodoro.domain
 
+/**
+ * Immutable snapshot of the shared cycle at one instant.
+ *
+ * There is deliberately no `isRunning` flag here: the cycle is a property of
+ * the clock, not of this app, so it is always running. Whether *this device*
+ * is tracking it (foreground service + ongoing notification) is a separate
+ * concern, held by `TimerPreferences`.
+ */
 data class TimerState(
     val phase: TimerPhase,
     val remainingMillis: Long,
     val cyclePosition: Long,
-    val isRunning: Boolean,
 ) {
     val progressFraction: Float
         get() {
@@ -18,7 +25,6 @@ data class TimerState(
             phase = TimerPhase.WORK,
             remainingMillis = WORK_DURATION_MILLIS,
             cyclePosition = 0L,
-            isRunning = false,
         )
     }
 }

@@ -32,10 +32,12 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val state by viewModel.timerState.collectAsStateWithLifecycle()
+            val isTracking by viewModel.isTracking.collectAsStateWithLifecycle()
 
             TeamodoroTheme(phase = state.phase) {
                 TimerScreen(
                     state = state,
+                    isTracking = isTracking,
                     onStart = viewModel::startTimer,
                     onStop = viewModel::stopTimer,
                 )

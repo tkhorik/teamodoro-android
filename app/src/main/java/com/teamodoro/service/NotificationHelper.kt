@@ -80,7 +80,7 @@ class NotificationHelper @Inject constructor(
         )
 
         val title = if (newPhase == TimerPhase.WORK) "Focus time!" else "Take a break!"
-        val text = if (newPhase == TimerPhase.WORK) "100-minute focus session started" else "30-minute break started"
+        val text = if (newPhase == TimerPhase.WORK) "25-minute focus session started" else "5-minute break started"
 
         val notification = NotificationCompat.Builder(context, CHANNEL_TRANSITION)
             .setSmallIcon(R.drawable.ic_tile_timer)
