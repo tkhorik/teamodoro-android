@@ -1,6 +1,8 @@
 package com.teamodoro.service
 
 import android.content.Intent
+import android.content.pm.ServiceInfo
+import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.teamodoro.domain.CalculateTimerUseCase
@@ -30,9 +32,14 @@ class TimerService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        startForeground(
+        // Android 14+ requires the foreground service type to be passed here and
+        // to match the manifest declaration, or the service is killed on start.
+        // ServiceCompat handles the pre-29 case where the parameter doesn't exist.
+        ServiceCompat.startForeground(
+            this,
             NOTIFICATION_TIMER_ID,
             notificationHelper.buildTimerNotification(TimerState.DEFAULT),
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE,
         )
     }
 

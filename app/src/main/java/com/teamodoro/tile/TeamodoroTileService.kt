@@ -1,5 +1,6 @@
 package com.teamodoro.tile
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
@@ -43,6 +44,10 @@ class TeamodoroTileService : TileService() {
         tileScope = null
     }
 
+    // The PendingIntent overload of startActivityAndCollapse only exists on API 34+,
+    // so the deprecated Intent overload is the only option below that. The version
+    // check below already routes around it; lint flags the call regardless.
+    @SuppressLint("StartActivityAndCollapseDeprecated")
     override fun onClick() {
         super.onClick()
         val intent = Intent(this, MainActivity::class.java).apply {
@@ -66,8 +71,14 @@ class TeamodoroTileService : TileService() {
         val phaseLabel = if (state.phase == TimerPhase.WORK) "Focus" else "Break"
         val timeText = state.remainingMillis.toMinutesSeconds()
 
-        tile.label = "Teamodoro"
-        tile.subtitle = "$phaseLabel · $timeText"
+        // Tile.setSubtitle is API 29+; on 26-28 it throws NoSuchMethodError.
+        // Fold the phase and time into the label there instead.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            tile.label = "Teamodoro"
+            tile.subtitle = "$phaseLabel · $timeText"
+        } else {
+            tile.label = "$phaseLabel · $timeText"
+        }
         tile.state = if (state.isRunning) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
         tile.updateTile()
     }
