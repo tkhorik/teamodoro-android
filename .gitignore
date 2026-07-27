@@ -43,3 +43,7 @@ keystore.properties
 
 # AI Assistant instructions (local only)
 .ai/
+CLAUDE.md
+
+# Local notes / runbooks
+RELEASING.md
