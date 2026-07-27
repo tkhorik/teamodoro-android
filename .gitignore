@@ -1,14 +1,24 @@
-# Gradle
+# Gradle build state
 .gradle/
 build/
 **/build/
 
-# Local configuration
+# GRADLE_USER_HOME resolves to ./gradle in this project, so Gradle dumps its
+# caches, daemon logs, profiles and scratch dirs straight into the repo.
+# Whitelist the two things that actually belong in version control rather than
+# blacklisting each junk directory as it appears.
+gradle/*
+!gradle/libs.versions.toml
+!gradle/wrapper/
+gradle/wrapper/dists/
+
+# Local configuration (machine-specific paths, SDK location)
 local.properties
 
 # Android Studio / IntelliJ
 .idea/
 *.iml
+.kotlin/
 
 # Native build output
 .externalNativeBuild/
@@ -20,8 +30,16 @@ captures/
 *.aab
 *.ap_
 
+# JVM heap dumps
+*.hprof
+
 # OS files
 .DS_Store
+
+# Signing material - never commit these
+*.jks
+*.keystore
+keystore.properties
 
 # AI Assistant instructions (local only)
 .ai/

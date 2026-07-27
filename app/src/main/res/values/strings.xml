@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Teamodoro</string>
+    <string name="tile_label">Teamodoro</string>
+    <string name="phase_focus">Focus</string>
+    <string name="phase_break">Break</string>
+    <string name="btn_start">Start Timer</string>
+    <string name="btn_stop">Stop Timer</string>
+    <string name="notification_timer_title">Teamodoro is running</string>
+    <string name="notification_focus_start">Focus time! 100-minute focus session started</string>
+    <string name="notification_break_start">Take a break! 30-minute break started</string>
+</resources>
