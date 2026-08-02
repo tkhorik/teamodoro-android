@@ -19,8 +19,7 @@ class BootReceiver : BroadcastReceiver() {
     lateinit var preferences: TimerPreferences
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        if (!preferences.isTracking) return
+        if (!TrackingPolicy.shouldRestoreAfterBoot(intent.action, preferences.isTracking)) return
 
         val serviceIntent = Intent(context, TimerService::class.java).apply {
             action = TimerService.ACTION_START
