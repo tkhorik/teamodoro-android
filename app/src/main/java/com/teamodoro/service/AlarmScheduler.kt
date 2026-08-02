@@ -16,14 +16,8 @@ class AlarmScheduler @Inject constructor(
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     fun scheduleNextTransition(triggerAtMillis: Long) {
-        val intent = Intent(context, AlarmReceiver::class.java).apply {
-            action = ACTION_PHASE_TRANSITION
-        }
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            REQUEST_CODE,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        val pendingIntent = checkNotNull(
+            transitionPendingIntent(PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE),
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
@@ -35,18 +29,39 @@ class AlarmScheduler @Inject constructor(
     }
 
     fun cancel() {
-        val intent = Intent(context, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            REQUEST_CODE,
-            intent,
+        val pendingIntent = transitionPendingIntent(
             PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE,
         ) ?: return
         alarmManager.cancel(pendingIntent)
     }
 
+    /**
+     * PendingIntent matching includes the wrapped Intent action. Both scheduling
+     * and cancellation must therefore build this exact same request.
+     */
+    private fun transitionPendingIntent(flags: Int): PendingIntent? {
+        val identity = transitionRequestIdentity
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            action = identity.action
+        }
+        return PendingIntent.getBroadcast(context, identity.requestCode, intent, flags)
+    }
+
     companion object {
         const val ACTION_PHASE_TRANSITION = "com.teamodoro.ACTION_PHASE_TRANSITION"
         private const val REQUEST_CODE = 1001
+
+        internal val transitionRequestIdentity = AlarmRequestIdentity(
+            receiverClassName = AlarmReceiver::class.java.name,
+            action = ACTION_PHASE_TRANSITION,
+            requestCode = REQUEST_CODE,
+        )
     }
 }
+
+/** The Android fields that determine the canonical transition alarm request. */
+internal data class AlarmRequestIdentity(
+    val receiverClassName: String,
+    val action: String,
+    val requestCode: Int,
+)

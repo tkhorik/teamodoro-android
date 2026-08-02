@@ -105,6 +105,14 @@ class CalculateTimerUseCaseTest {
     @Test
     fun `next transition exactly on a boundary is a full phase away`() {
         assertEquals(utc(9, 25), useCase.nextTransitionAt(utc(9, 0)))
+        assertEquals(utc(9, 30), useCase.nextTransitionAt(utc(9, 25)))
+    }
+
+    @Test
+    fun `millis until next transition matches the state countdown`() {
+        val now = utc(9, 24, 30)
+        assertEquals(30_000L, useCase.millisUntilNextTransition(now))
+        assertEquals(useCase.calculate(now).remainingMillis, useCase.millisUntilNextTransition(now))
     }
 
     // ---- Cross-check against the reference predicate ---------------------

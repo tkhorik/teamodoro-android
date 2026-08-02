@@ -4,17 +4,25 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
+import com.teamodoro.data.TimerPreferences
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Wakes the device at a phase boundary and hands off to [TimerService].
  *
- * No Hilt entry point and no injected [AlarmScheduler]: this receiver only
- * forwards an intent. It previously injected the scheduler and never used it.
+ * A transition alarm may have been queued just before the user stopped
+ * tracking. Check the persisted preference before reviving the service so that
+ * stale broadcasts cannot restore notifications.
  */
+@AndroidEntryPoint
 class AlarmReceiver : BroadcastReceiver() {
 
+    @Inject
+    lateinit var preferences: TimerPreferences
+
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action != AlarmScheduler.ACTION_PHASE_TRANSITION) return
+        if (!TrackingPolicy.shouldHandlePhaseTransition(intent.action, preferences.isTracking)) return
 
         val serviceIntent = Intent(context, TimerService::class.java).apply {
             action = TimerService.ACTION_PHASE_TRANSITION

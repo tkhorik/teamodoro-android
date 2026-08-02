@@ -56,13 +56,12 @@ class NotificationHelper @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 
-        val phaseLabel = if (state.phase == TimerPhase.WORK) "Focus" else "Break"
-        val timeText = state.remainingMillis.toMinutesSeconds()
+        val content = NotificationContent.timer(state)
 
         return NotificationCompat.Builder(context, CHANNEL_TIMER)
             .setSmallIcon(R.drawable.ic_tile_timer)
-            .setContentTitle("$phaseLabel — $timeText remaining")
-            .setContentText("Teamodoro is running")
+            .setContentTitle(content.title)
+            .setContentText(content.text)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
             .setSilent(true)
@@ -79,26 +78,18 @@ class NotificationHelper @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 
-        val title = if (newPhase == TimerPhase.WORK) "Focus time!" else "Take a break!"
-        val text = if (newPhase == TimerPhase.WORK) "25-minute focus session started" else "5-minute break started"
+        val content = NotificationContent.transition(newPhase)
 
         val notification = NotificationCompat.Builder(context, CHANNEL_TRANSITION)
             .setSmallIcon(R.drawable.ic_tile_timer)
-            .setContentTitle(title)
-            .setContentText(text)
+            .setContentTitle(content.title)
+            .setContentText(content.text)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
         manager.notify(NOTIFICATION_TRANSITION_ID, notification)
-    }
-
-    private fun Long.toMinutesSeconds(): String {
-        val totalSeconds = this / 1_000
-        val minutes = totalSeconds / 60
-        val seconds = totalSeconds % 60
-        return "%02d:%02d".format(minutes, seconds)
     }
 
     companion object {
