@@ -79,6 +79,6 @@ class LocaleManager @Inject constructor(
 
     companion object {
         /** Keep in sync with res/xml/locales_config.xml and the values-<tag>/ resource directories. */
-        val SUPPORTED_LANGUAGE_TAGS = listOf("en", "es", "fr", "de", "ru", "uk", "ro")
+        val SUPPORTED_LANGUAGE_TAGS = listOf("en", "es", "fr", "de", "ru", "uk", "ro", "zh-CN", "zh-TW")
     }
 }

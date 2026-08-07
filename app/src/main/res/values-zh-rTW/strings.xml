@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="phase_focus">專注</string>
+    <string name="phase_break">休息</string>
+    <string name="timer_remaining">剩餘</string>
+    <string name="btn_notifications_start">每個階段都提醒我</string>
+    <string name="btn_notifications_stop">停止提醒</string>
+    <string name="settings_language_label">應用程式語言</string>
+    <string name="settings_language_dialog_title">選擇語言</string>
+    <string name="settings_language_system_default">系統預設</string>
+</resources>
