@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="phase_focus">Fokus</string>
+    <string name="phase_break">Pause</string>
+    <string name="timer_remaining">verbleibend</string>
+    <string name="btn_notifications_start">Bei jeder Phase benachrichtigen</string>
+    <string name="btn_notifications_stop">Benachrichtigungen stoppen</string>
+    <string name="settings_language_label">App-Sprache</string>
+    <string name="settings_language_dialog_title">Sprache wählen</string>
+    <string name="settings_language_system_default">Systemsprache</string>
+</resources>

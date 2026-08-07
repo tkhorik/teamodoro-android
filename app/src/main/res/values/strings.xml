@@ -4,8 +4,20 @@
     <string name="tile_label">Teamodoro</string>
     <string name="phase_focus">Focus</string>
     <string name="phase_break">Break</string>
-    <string name="btn_start">Start Timer</string>
-    <string name="btn_stop">Stop Timer</string>
+    <string name="timer_remaining">remaining</string>
+    <string name="btn_notifications_start">Notify me at each phase</string>
+    <string name="btn_notifications_stop">Stop notifications</string>
+    <string name="settings_language_label">App language</string>
+    <string name="settings_language_dialog_title">Choose language</string>
+    <string name="settings_language_system_default">System default</string>
+
+    <!--
+      NOTE: not yet wired to string resources — service/NotificationContent.kt is a
+      pure Kotlin object (no Context) so it stays unit-testable at the JVM level
+      (see NotificationContentTest). These three entries are currently unused; a
+      follow-up would thread localized strings from NotificationHelper (which does
+      have a Context) into NotificationContent instead of formatting them there.
+    -->
     <string name="notification_timer_title">Teamodoro is running</string>
     <string name="notification_focus_start">Focus time! 100-minute focus session started</string>
     <string name="notification_break_start">Take a break! 30-minute break started</string>

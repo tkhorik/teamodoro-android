@@ -4,19 +4,27 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.teamodoro.ui.screen.LanguagePickerDialog
 import com.teamodoro.ui.screen.TimerScreen
 import com.teamodoro.ui.theme.TeamodoroTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+// AppCompatActivity, not ComponentActivity: AppCompatDelegate.setApplicationLocales()
+// (see LocaleManager) only takes effect on API 26-32 when the activity extends
+// AppCompatActivity — a plain ComponentActivity silently no-ops there. Compose
+// works the same either way, so this costs nothing on API 33+.
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val viewModel: TimerViewModel by viewModels()
 
@@ -33,6 +41,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val state by viewModel.timerState.collectAsStateWithLifecycle()
             val isTracking by viewModel.isTracking.collectAsStateWithLifecycle()
+            val currentLanguageTag by viewModel.currentLanguageTag.collectAsStateWithLifecycle()
+            var showLanguageDialog by remember { mutableStateOf(false) }
 
             TeamodoroTheme(phase = state.phase) {
                 TimerScreen(
@@ -40,7 +50,32 @@ class MainActivity : ComponentActivity() {
                     isTracking = isTracking,
                     onStart = viewModel::startTimer,
                     onStop = viewModel::stopTimer,
+                    currentLanguageTag = currentLanguageTag,
+                    supportedLanguages = viewModel.supportedLanguages,
+                    onLanguageRowClick = {
+                        // API 33+: the OS has its own per-app language screen — prefer
+                        // it, since it also covers other locale-aware apps at once.
+                        // Below that there is no such screen, so fall back to an
+                        // in-app picker backed by AppCompatDelegate.
+                        if (viewModel.systemLanguagePickerAvailable) {
+                            startActivity(viewModel.systemLanguageSettingsIntent())
+                        } else {
+                            showLanguageDialog = true
+                        }
+                    },
                 )
+
+                if (showLanguageDialog) {
+                    LanguagePickerDialog(
+                        languages = viewModel.supportedLanguages,
+                        currentTag = currentLanguageTag,
+                        onLanguageSelected = { tag ->
+                            viewModel.setLanguage(tag)
+                            showLanguageDialog = false
+                        },
+                        onDismiss = { showLanguageDialog = false },
+                    )
+                }
             }
         }
     }

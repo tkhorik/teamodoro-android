@@ -20,9 +20,27 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Teamodoro">
+
+        <!--
+          Lets AndroidX AppCompat auto-persist the per-app language override for
+          API 26-32, which have no system Settings entry of their own (that only
+          exists from API 33 - see android:localeConfig above). Without this,
+          AppCompatDelegate.setApplicationLocales() would not survive a process
+          death on those API levels. No-op on API 33+, where the platform
+          LocaleManager already persists the choice. See LocaleManager.kt.
+        -->
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
 
         <activity
             android:name=".ui.MainActivity"

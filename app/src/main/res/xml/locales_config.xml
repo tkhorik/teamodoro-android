@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Declares the languages Teamodoro ships translations for. Referenced from
+  AndroidManifest.xml via android:localeConfig, this is what makes the app show
+  up with its own entry under Settings > Apps > Teamodoro > Language on API 33+
+  (Per-App Language Preferences). See LocaleManager for the runtime API and
+  CLAUDE.md for how this fits the rest of the app.
+
+  Keep this list in sync with the values-<tag>/ resource directories and with
+  LocaleManager.SUPPORTED_LANGUAGE_TAGS.
+-->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en" />
+    <locale android:name="es" />
+    <locale android:name="fr" />
+    <locale android:name="de" />
+    <locale android:name="ru" />
+    <locale android:name="uk" />
+    <locale android:name="ro" />
+</locale-config>

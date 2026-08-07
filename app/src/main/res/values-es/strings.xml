@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="phase_focus">Enfoque</string>
+    <string name="phase_break">Descanso</string>
+    <string name="timer_remaining">restante</string>
+    <string name="btn_notifications_start">Avisarme en cada fase</string>
+    <string name="btn_notifications_stop">Detener avisos</string>
+    <string name="settings_language_label">Idioma de la app</string>
+    <string name="settings_language_dialog_title">Elegir idioma</string>
+    <string name="settings_language_system_default">Idioma del sistema</string>
+</resources>

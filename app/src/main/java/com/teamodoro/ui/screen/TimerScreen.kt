@@ -16,17 +16,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.teamodoro.R
 import com.teamodoro.domain.TimerPhase
 import com.teamodoro.domain.TimerState
+import com.teamodoro.locale.LocaleManager
 import com.teamodoro.ui.theme.TeamodoroTheme
+import java.util.Locale
 
 @Composable
 fun TimerScreen(
@@ -34,6 +39,9 @@ fun TimerScreen(
     isTracking: Boolean,
     onStart: () -> Unit,
     onStop: () -> Unit,
+    currentLanguageTag: String?,
+    supportedLanguages: List<LocaleManager.AppLanguage>,
+    onLanguageRowClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Surface(
@@ -60,15 +68,23 @@ fun TimerScreen(
                 onStart = onStart,
                 onStop = onStop,
             )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            LanguageRow(
+                currentLanguageTag = currentLanguageTag,
+                supportedLanguages = supportedLanguages,
+                onClick = onLanguageRowClick,
+            )
         }
     }
 }
 
 @Composable
 private fun PhaseLabel(phase: TimerPhase) {
-    val label = if (phase == TimerPhase.WORK) "Focus" else "Break"
+    val labelRes = if (phase == TimerPhase.WORK) R.string.phase_focus else R.string.phase_break
     Text(
-        text = label,
+        text = stringResource(labelRes),
         style = MaterialTheme.typography.headlineLarge,
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colorScheme.primary,
@@ -100,7 +116,7 @@ private fun TimerRing(state: TimerState) {
                 color = MaterialTheme.colorScheme.onBackground,
             )
             Text(
-                text = "remaining",
+                text = stringResource(R.string.timer_remaining),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
             )
@@ -118,12 +134,29 @@ private fun ControlButtons(
     // buttons control the notifications and the tile, not the timer itself.
     if (isTracking) {
         OutlinedButton(onClick = onStop) {
-            Text("Stop notifications")
+            Text(stringResource(R.string.btn_notifications_stop))
         }
     } else {
         Button(onClick = onStart) {
-            Text("Notify me at each phase")
+            Text(stringResource(R.string.btn_notifications_start))
         }
+    }
+}
+
+@Composable
+private fun LanguageRow(
+    currentLanguageTag: String?,
+    supportedLanguages: List<LocaleManager.AppLanguage>,
+    onClick: () -> Unit,
+) {
+    val label = supportedLanguages
+        .firstOrNull { it.tag == currentLanguageTag }
+        ?.displayName
+        ?: currentLanguageTag?.let { Locale.forLanguageTag(it).getDisplayName(Locale.forLanguageTag(it)) }
+        ?: stringResource(R.string.settings_language_system_default)
+
+    TextButton(onClick = onClick) {
+        Text("${stringResource(R.string.settings_language_label)}: $label")
     }
 }
 
@@ -147,6 +180,9 @@ private fun TimerScreenWorkPreview() {
             isTracking = true,
             onStart = {},
             onStop = {},
+            currentLanguageTag = null,
+            supportedLanguages = emptyList(),
+            onLanguageRowClick = {},
         )
     }
 }
@@ -164,6 +200,9 @@ private fun TimerScreenBreakPreview() {
             isTracking = false,
             onStart = {},
             onStop = {},
+            currentLanguageTag = null,
+            supportedLanguages = emptyList(),
+            onLanguageRowClick = {},
         )
     }
 }
