@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Teamodoro</string>
-    <string name="tile_label">Teamodoro</string>
+    <!-- Brand name — not translated in any locale. -->
+    <string name="app_name" translatable="false">Teamodoro</string>
+    <string name="tile_label" translatable="false">Teamodoro</string>
     <string name="phase_focus">Focus</string>
     <string name="phase_break">Break</string>
     <string name="timer_remaining">remaining</string>
@@ -14,11 +15,12 @@
     <!--
       NOTE: not yet wired to string resources — service/NotificationContent.kt is a
       pure Kotlin object (no Context) so it stays unit-testable at the JVM level
-      (see NotificationContentTest). These three entries are currently unused; a
+      (see NotificationContentTest). These three entries are currently unused, hence
+      translatable="false" rather than translated copies nothing reads yet; a
       follow-up would thread localized strings from NotificationHelper (which does
       have a Context) into NotificationContent instead of formatting them there.
     -->
-    <string name="notification_timer_title">Teamodoro is running</string>
-    <string name="notification_focus_start">Focus time! 100-minute focus session started</string>
-    <string name="notification_break_start">Take a break! 30-minute break started</string>
+    <string name="notification_timer_title" translatable="false">Teamodoro is running</string>
+    <string name="notification_focus_start" translatable="false">Focus time! 100-minute focus session started</string>
+    <string name="notification_break_start" translatable="false">Take a break! 30-minute break started</string>
 </resources>
