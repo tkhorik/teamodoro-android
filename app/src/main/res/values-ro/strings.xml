@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="phase_focus">Concentrare</string>
+    <string name="phase_break">Pauză</string>
+    <string name="timer_remaining">rămas</string>
+    <string name="btn_notifications_start">Notifică-mă la fiecare fază</string>
+    <string name="btn_notifications_stop">Oprește notificările</string>
+    <string name="settings_language_label">Limba aplicației</string>
+    <string name="settings_language_dialog_title">Alege limba</string>
+    <string name="settings_language_system_default">Limba sistemului</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="phase_focus">Concentration</string>
+    <string name="phase_break">Pause</string>
+    <string name="timer_remaining">restant</string>
+    <string name="btn_notifications_start">M\'avertir à chaque phase</string>
+    <string name="btn_notifications_stop">Arrêter les avis</string>
+    <string name="settings_language_label">Langue de l\'application</string>
+    <string name="settings_language_dialog_title">Choisir la langue</string>
+    <string name="settings_language_system_default">Langue du système</string>
+</resources>

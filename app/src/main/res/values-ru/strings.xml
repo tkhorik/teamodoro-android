@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="phase_focus">Фокус</string>
+    <string name="phase_break">Перерыв</string>
+    <string name="timer_remaining">осталось</string>
+    <string name="btn_notifications_start">Уведомлять о каждой фазе</string>
+    <string name="btn_notifications_stop">Остановить уведомления</string>
+    <string name="settings_language_label">Язык приложения</string>
+    <string name="settings_language_dialog_title">Выбор языка</string>
+    <string name="settings_language_system_default">Язык системы</string>
+</resources>
