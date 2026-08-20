@@ -8,4 +8,6 @@
     <string name="settings_language_label">应用语言</string>
     <string name="settings_language_dialog_title">选择语言</string>
     <string name="settings_language_system_default">系统默认</string>
+    <string name="theme_switch_to_dark">切换到深色主题</string>
+    <string name="theme_switch_to_light">切换到浅色主题</string>
 </resources>

@@ -8,4 +8,6 @@
     <string name="settings_language_label">App-Sprache</string>
     <string name="settings_language_dialog_title">Sprache wählen</string>
     <string name="settings_language_system_default">Systemsprache</string>
+    <string name="theme_switch_to_dark">Zum dunklen Design wechseln</string>
+    <string name="theme_switch_to_light">Zum hellen Design wechseln</string>
 </resources>
