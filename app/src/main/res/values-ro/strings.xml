@@ -10,4 +10,14 @@
     <string name="settings_language_system_default">Limba sistemului</string>
     <string name="theme_switch_to_dark">Comută la tema întunecată</string>
     <string name="theme_switch_to_light">Comută la tema luminoasă</string>
+    <string name="notification_channel_timer_name">Cronometru</string>
+    <string name="notification_channel_timer_description">Notificare pentru cronometrul activ</string>
+    <string name="notification_channel_transition_name">Schimbări de fază</string>
+    <string name="notification_channel_transition_description">Alerte când se schimbă faza cronometrului</string>
+    <string name="notification_timer_title">%1$s — au rămas %2$s</string>
+    <string name="notification_timer_text">Teamodoro este activ</string>
+    <string name="notification_focus_start_title">Timp de concentrare!</string>
+    <string name="notification_focus_start_text">A început sesiunea de concentrare de 25 de minute</string>
+    <string name="notification_break_start_title">Ia o pauză!</string>
+    <string name="notification_break_start_text">A început pauza de 5 minute</string>
 </resources>

@@ -6,10 +6,12 @@ import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import com.teamodoro.R
 import com.teamodoro.data.TimerPreferences
 import com.teamodoro.domain.CalculateTimerUseCase
 import com.teamodoro.domain.TimerPhase
 import com.teamodoro.domain.TimerState
+import com.teamodoro.locale.LocaleManager
 import com.teamodoro.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -28,6 +30,9 @@ class TeamodoroTileService : TileService() {
 
     @Inject
     lateinit var preferences: TimerPreferences
+
+    @Inject
+    lateinit var localeManager: LocaleManager
 
     private var tileScope: CoroutineScope? = null
     private var timerJob: Job? = null
@@ -71,13 +76,16 @@ class TeamodoroTileService : TileService() {
     private fun updateTile(state: TimerState) {
         val tile = qsTile ?: return
 
-        val phaseLabel = if (state.phase == TimerPhase.WORK) "Focus" else "Break"
+        val localizedContext = localeManager.localizedContext()
+        val phaseLabel = localizedContext.getString(
+            if (state.phase == TimerPhase.WORK) R.string.phase_focus else R.string.phase_break,
+        )
         val timeText = state.remainingMillis.toMinutesSeconds()
 
         // Tile.setSubtitle is API 29+; on 26-28 it throws NoSuchMethodError.
         // Fold the phase and time into the label there instead.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            tile.label = "Teamodoro"
+            tile.label = localizedContext.getString(R.string.tile_label)
             tile.subtitle = "$phaseLabel · $timeText"
         } else {
             tile.label = "$phaseLabel · $timeText"

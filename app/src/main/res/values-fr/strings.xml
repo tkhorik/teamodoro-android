@@ -10,4 +10,14 @@
     <string name="settings_language_system_default">Langue du système</string>
     <string name="theme_switch_to_dark">Passer au thème sombre</string>
     <string name="theme_switch_to_light">Passer au thème clair</string>
+    <string name="notification_channel_timer_name">Minuteur</string>
+    <string name="notification_channel_timer_description">Notification du minuteur en cours</string>
+    <string name="notification_channel_transition_name">Changements de phase</string>
+    <string name="notification_channel_transition_description">Alertes lorsque la phase du minuteur change</string>
+    <string name="notification_timer_title">%1$s — %2$s restantes</string>
+    <string name="notification_timer_text">Teamodoro est en cours</string>
+    <string name="notification_focus_start_title">C’est l’heure de se concentrer !</string>
+    <string name="notification_focus_start_text">Session de concentration de 25 minutes commencée</string>
+    <string name="notification_break_start_title">Faites une pause !</string>
+    <string name="notification_break_start_text">Pause de 5 minutes commencée</string>
 </resources>

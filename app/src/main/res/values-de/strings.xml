@@ -10,4 +10,14 @@
     <string name="settings_language_system_default">Systemsprache</string>
     <string name="theme_switch_to_dark">Zum dunklen Design wechseln</string>
     <string name="theme_switch_to_light">Zum hellen Design wechseln</string>
+    <string name="notification_channel_timer_name">Timer</string>
+    <string name="notification_channel_timer_description">Laufende Timer-Benachrichtigung</string>
+    <string name="notification_channel_transition_name">Phasenwechsel</string>
+    <string name="notification_channel_transition_description">Hinweise bei einem Phasenwechsel</string>
+    <string name="notification_timer_title">%1$s — noch %2$s</string>
+    <string name="notification_timer_text">Teamodoro läuft</string>
+    <string name="notification_focus_start_title">Zeit für Fokus!</string>
+    <string name="notification_focus_start_text">25-minütige Fokussitzung gestartet</string>
+    <string name="notification_break_start_title">Zeit für eine Pause!</string>
+    <string name="notification_break_start_text">5-minütige Pause gestartet</string>
 </resources>

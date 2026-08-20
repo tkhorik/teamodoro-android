@@ -2,12 +2,12 @@ package com.teamodoro.locale
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
-import com.teamodoro.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
@@ -39,13 +39,21 @@ class LocaleManager @Inject constructor(
     /** One entry in the in-app picker. [tag] is a BCP-47 tag, or null for "follow the system". */
     data class AppLanguage(
         val tag: String?,
-        val displayName: String,
+        /** Null for the system-default entry; its label must be resolved by the UI. */
+        val displayName: String?,
     )
 
-    /** "System default" first, then every locale declared in locales_config.xml, each in its own language. */
+    /**
+     * "System default" first, then every locale declared in locales_config.xml,
+     * each in its own language.
+     *
+     * The system-default label intentionally is not read here. This singleton can
+     * outlive an Activity locale change, so a translated String read from its
+     * application Context would remain in the old language.
+     */
     val supportedLanguages: List<AppLanguage> by lazy {
         buildList {
-            add(AppLanguage(tag = null, displayName = context.getString(R.string.settings_language_system_default)))
+            add(AppLanguage(tag = null, displayName = null))
             SUPPORTED_LANGUAGE_TAGS.forEach { tag ->
                 val locale = Locale.forLanguageTag(tag)
                 val name = locale.getDisplayName(locale).replaceFirstChar { it.titlecase(locale) }
@@ -68,6 +76,21 @@ class LocaleManager @Inject constructor(
             LocaleListCompat.forLanguageTags(tag)
         }
         AppCompatDelegate.setApplicationLocales(locales)
+    }
+
+    /**
+     * A Context whose resources reflect the active app-language override.
+     *
+     * AppCompat applies its locale override to Activities on Android 12L and
+     * below, but an injected application Context is not automatically wrapped.
+     * Services (notifications and Quick Settings) use this when looking up text.
+     */
+    fun localizedContext(): Context {
+        val tag = currentTag() ?: return context
+        val configuration = Configuration(context.resources.configuration).apply {
+            setLocale(Locale.forLanguageTag(tag))
+        }
+        return context.createConfigurationContext(configuration)
     }
 
     /** True on API 33+, where Settings has a dedicated per-app language screen. */

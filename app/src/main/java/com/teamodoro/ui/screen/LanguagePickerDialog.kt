@@ -46,7 +46,11 @@ fun LanguagePickerDialog(
                             )
                             .padding(vertical = 4.dp),
                     ) {
-                        RadioRow(label = language.displayName, selected = selected)
+                        RadioRow(
+                            label = language.displayName
+                                ?: stringResource(R.string.settings_language_system_default),
+                            selected = selected,
+                        )
                     }
                 }
             }
