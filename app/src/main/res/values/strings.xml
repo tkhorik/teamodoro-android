@@ -11,6 +11,8 @@
     <string name="settings_language_label">App language</string>
     <string name="settings_language_dialog_title">Choose language</string>
     <string name="settings_language_system_default">System default</string>
+    <string name="theme_switch_to_dark">Switch to dark theme</string>
+    <string name="theme_switch_to_light">Switch to light theme</string>
 
     <!--
       NOTE: not yet wired to string resources — service/NotificationContent.kt is a

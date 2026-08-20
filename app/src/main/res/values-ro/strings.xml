@@ -8,4 +8,6 @@
     <string name="settings_language_label">Limba aplicației</string>
     <string name="settings_language_dialog_title">Alege limba</string>
     <string name="settings_language_system_default">Limba sistemului</string>
+    <string name="theme_switch_to_dark">Comută la tema întunecată</string>
+    <string name="theme_switch_to_light">Comută la tema luminoasă</string>
 </resources>

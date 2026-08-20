@@ -10,13 +10,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -29,11 +37,13 @@ import androidx.compose.ui.unit.sp
 import com.teamodoro.R
 import com.teamodoro.domain.TimerPhase
 import com.teamodoro.domain.TimerState
+import com.teamodoro.domain.ThemeMode
 import com.teamodoro.locale.LocaleManager
-import com.teamodoro.ui.theme.TeamodoroTheme
+import com.teamodoro.ui.theme.AppTheme
 import java.util.Locale
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun TimerScreen(
     state: TimerState,
     isTracking: Boolean,
@@ -42,41 +52,82 @@ fun TimerScreen(
     currentLanguageTag: String?,
     supportedLanguages: List<LocaleManager.AppLanguage>,
     onLanguageRowClick: () -> Unit,
+    themeMode: ThemeMode,
+    onThemeToggle: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Surface(
+    Scaffold(
         modifier = modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.app_name)) },
+                actions = {
+                    ThemeToggleButton(
+                        themeMode = themeMode,
+                        onClick = onThemeToggle,
+                    )
+                },
+            )
+        },
+    ) { innerPadding ->
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background,
         ) {
-            PhaseLabel(phase = state.phase)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                PhaseLabel(phase = state.phase)
 
-            Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(40.dp))
 
-            TimerRing(state = state)
+                TimerRing(state = state)
 
-            Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(48.dp))
 
-            ControlButtons(
-                isTracking = isTracking,
-                onStart = onStart,
-                onStop = onStop,
-            )
+                ControlButtons(
+                    isTracking = isTracking,
+                    onStart = onStart,
+                    onStop = onStop,
+                )
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            LanguageRow(
-                currentLanguageTag = currentLanguageTag,
-                supportedLanguages = supportedLanguages,
-                onClick = onLanguageRowClick,
-            )
+                LanguageRow(
+                    currentLanguageTag = currentLanguageTag,
+                    supportedLanguages = supportedLanguages,
+                    onClick = onLanguageRowClick,
+                )
+            }
         }
+    }
+}
+
+@Composable
+private fun ThemeToggleButton(
+    themeMode: ThemeMode,
+    onClick: () -> Unit,
+) {
+    val systemIsDark = androidx.compose.foundation.isSystemInDarkTheme()
+    val activeDarkTheme = when (themeMode) {
+        ThemeMode.SYSTEM -> systemIsDark
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+    }
+    val contentDescription = stringResource(
+        if (activeDarkTheme) R.string.theme_switch_to_light else R.string.theme_switch_to_dark,
+    )
+
+    IconButton(onClick = onClick) {
+        Icon(
+            imageVector = if (activeDarkTheme) Icons.Default.LightMode else Icons.Default.DarkMode,
+            contentDescription = contentDescription,
+        )
     }
 }
 
@@ -170,7 +221,7 @@ private fun Long.toMinutesSeconds(): String {
 @Preview(showBackground = true)
 @Composable
 private fun TimerScreenWorkPreview() {
-    TeamodoroTheme(phase = TimerPhase.WORK) {
+    AppTheme(phase = TimerPhase.WORK, themeMode = ThemeMode.LIGHT) {
         TimerScreen(
             state = TimerState(
                 phase = TimerPhase.WORK,
@@ -183,6 +234,8 @@ private fun TimerScreenWorkPreview() {
             currentLanguageTag = null,
             supportedLanguages = emptyList(),
             onLanguageRowClick = {},
+            themeMode = ThemeMode.LIGHT,
+            onThemeToggle = {},
         )
     }
 }
@@ -190,7 +243,7 @@ private fun TimerScreenWorkPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun TimerScreenBreakPreview() {
-    TeamodoroTheme(phase = TimerPhase.BREAK) {
+    AppTheme(phase = TimerPhase.BREAK, themeMode = ThemeMode.DARK) {
         TimerScreen(
             state = TimerState(
                 phase = TimerPhase.BREAK,
@@ -203,6 +256,8 @@ private fun TimerScreenBreakPreview() {
             currentLanguageTag = null,
             supportedLanguages = emptyList(),
             onLanguageRowClick = {},
+            themeMode = ThemeMode.DARK,
+            onThemeToggle = {},
         )
     }
 }

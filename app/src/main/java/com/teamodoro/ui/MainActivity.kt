@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.teamodoro.ui.screen.LanguagePickerDialog
 import com.teamodoro.ui.screen.TimerScreen
-import com.teamodoro.ui.theme.TeamodoroTheme
+import com.teamodoro.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 // AppCompatActivity, not ComponentActivity: AppCompatDelegate.setApplicationLocales()
@@ -27,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: TimerViewModel by viewModels()
+    private val themeViewModel: ThemeViewModel by viewModels()
 
     private val notificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -42,9 +43,10 @@ class MainActivity : AppCompatActivity() {
             val state by viewModel.timerState.collectAsStateWithLifecycle()
             val isTracking by viewModel.isTracking.collectAsStateWithLifecycle()
             val currentLanguageTag by viewModel.currentLanguageTag.collectAsStateWithLifecycle()
+            val themeMode by themeViewModel.themeMode.collectAsStateWithLifecycle()
             var showLanguageDialog by remember { mutableStateOf(false) }
 
-            TeamodoroTheme(phase = state.phase) {
+            AppTheme(phase = state.phase, themeMode = themeMode) {
                 TimerScreen(
                     state = state,
                     isTracking = isTracking,
@@ -63,6 +65,8 @@ class MainActivity : AppCompatActivity() {
                             showLanguageDialog = true
                         }
                     },
+                    themeMode = themeMode,
+                    onThemeToggle = themeViewModel::toggleTheme,
                 )
 
                 if (showLanguageDialog) {

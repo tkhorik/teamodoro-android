@@ -8,4 +8,6 @@
     <string name="settings_language_label">Мова додатка</string>
     <string name="settings_language_dialog_title">Виберіть мову</string>
     <string name="settings_language_system_default">Мова системи</string>
+    <string name="theme_switch_to_dark">Перейти на темну тему</string>
+    <string name="theme_switch_to_light">Перейти на світлу тему</string>
 </resources>

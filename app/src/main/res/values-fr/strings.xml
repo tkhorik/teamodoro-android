@@ -8,4 +8,6 @@
     <string name="settings_language_label">Langue de l\'application</string>
     <string name="settings_language_dialog_title">Choisir la langue</string>
     <string name="settings_language_system_default">Langue du système</string>
+    <string name="theme_switch_to_dark">Passer au thème sombre</string>
+    <string name="theme_switch_to_light">Passer au thème clair</string>
 </resources>
