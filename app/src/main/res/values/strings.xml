@@ -14,15 +14,14 @@
     <string name="theme_switch_to_dark">Switch to dark theme</string>
     <string name="theme_switch_to_light">Switch to light theme</string>
 
-    <!--
-      NOTE: not yet wired to string resources — service/NotificationContent.kt is a
-      pure Kotlin object (no Context) so it stays unit-testable at the JVM level
-      (see NotificationContentTest). These three entries are currently unused, hence
-      translatable="false" rather than translated copies nothing reads yet; a
-      follow-up would thread localized strings from NotificationHelper (which does
-      have a Context) into NotificationContent instead of formatting them there.
-    -->
-    <string name="notification_timer_title" translatable="false">Teamodoro is running</string>
-    <string name="notification_focus_start" translatable="false">Focus time! 100-minute focus session started</string>
-    <string name="notification_break_start" translatable="false">Take a break! 30-minute break started</string>
+    <string name="notification_channel_timer_name">Timer</string>
+    <string name="notification_channel_timer_description">Ongoing timer notification</string>
+    <string name="notification_channel_transition_name">Phase transitions</string>
+    <string name="notification_channel_transition_description">Alerts when the timer phase changes</string>
+    <string name="notification_timer_title">%1$s — %2$s remaining</string>
+    <string name="notification_timer_text">Teamodoro is running</string>
+    <string name="notification_focus_start_title">Focus time!</string>
+    <string name="notification_focus_start_text">25-minute focus session started</string>
+    <string name="notification_break_start_title">Take a break!</string>
+    <string name="notification_break_start_text">5-minute break started</string>
 </resources>

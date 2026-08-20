@@ -84,6 +84,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // On Android 13+, the language may have been changed in the system
+        // Settings screen opened from this Activity. The ViewModel survives a
+        // configuration change, so refresh its selection label on return.
+        viewModel.refreshCurrentLanguage()
+    }
+
     private fun requestNotificationPermissionIfNeeded() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)

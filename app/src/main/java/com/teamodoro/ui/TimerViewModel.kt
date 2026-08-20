@@ -69,6 +69,11 @@ class TimerViewModel @Inject constructor(
         _currentLanguageTag.value = tag
     }
 
+    /** Re-read a choice made in Android's per-app language Settings screen. */
+    fun refreshCurrentLanguage() {
+        _currentLanguageTag.value = localeManager.currentTag()
+    }
+
     fun startTimer() = sendToService(TimerService.ACTION_START)
 
     fun stopTimer() = sendToService(TimerService.ACTION_STOP)

@@ -10,4 +10,14 @@
     <string name="settings_language_system_default">系統預設</string>
     <string name="theme_switch_to_dark">切換至深色主題</string>
     <string name="theme_switch_to_light">切換至淺色主題</string>
+    <string name="notification_channel_timer_name">計時器</string>
+    <string name="notification_channel_timer_description">進行中的計時器通知</string>
+    <string name="notification_channel_transition_name">階段切換</string>
+    <string name="notification_channel_transition_description">計時器階段切換時的提醒</string>
+    <string name="notification_timer_title">%1$s — 剩餘 %2$s</string>
+    <string name="notification_timer_text">Teamodoro 正在運行</string>
+    <string name="notification_focus_start_title">專注時間到了！</string>
+    <string name="notification_focus_start_text">已開始 25 分鐘專注時段</string>
+    <string name="notification_break_start_title">休息一下！</string>
+    <string name="notification_break_start_text">已開始 5 分鐘休息時段</string>
 </resources>

@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import com.teamodoro.R
 import com.teamodoro.domain.TimerPhase
 import com.teamodoro.domain.TimerState
+import com.teamodoro.locale.LocaleManager
 import com.teamodoro.ui.MainActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -18,29 +19,26 @@ import javax.inject.Singleton
 @Singleton
 class NotificationHelper @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val localeManager: LocaleManager,
 ) {
     private val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-    init {
-        createChannels()
-    }
-
-    private fun createChannels() {
+    private fun createChannels(localizedContext: Context) {
         val timerChannel = NotificationChannel(
             CHANNEL_TIMER,
-            "Timer",
+            localizedContext.getString(R.string.notification_channel_timer_name),
             NotificationManager.IMPORTANCE_LOW,
         ).apply {
-            description = "Ongoing timer notification"
+            description = localizedContext.getString(R.string.notification_channel_timer_description)
             setShowBadge(false)
         }
 
         val transitionChannel = NotificationChannel(
             CHANNEL_TRANSITION,
-            "Phase Transitions",
+            localizedContext.getString(R.string.notification_channel_transition_name),
             NotificationManager.IMPORTANCE_HIGH,
         ).apply {
-            description = "Alerts when the timer phase changes"
+            description = localizedContext.getString(R.string.notification_channel_transition_description)
         }
 
         manager.createNotificationChannel(timerChannel)
@@ -48,6 +46,8 @@ class NotificationHelper @Inject constructor(
     }
 
     fun buildTimerNotification(state: TimerState): Notification {
+        val localizedContext = localeManager.localizedContext()
+        createChannels(localizedContext)
         val launchIntent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -56,7 +56,7 @@ class NotificationHelper @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 
-        val content = NotificationContent.timer(state)
+        val content = NotificationContent.timer(state, localizedCopy(localizedContext))
 
         return NotificationCompat.Builder(context, CHANNEL_TIMER)
             .setSmallIcon(R.drawable.ic_tile_timer)
@@ -70,6 +70,8 @@ class NotificationHelper @Inject constructor(
     }
 
     fun showTransitionNotification(newPhase: TimerPhase) {
+        val localizedContext = localeManager.localizedContext()
+        createChannels(localizedContext)
         val launchIntent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -78,7 +80,7 @@ class NotificationHelper @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 
-        val content = NotificationContent.transition(newPhase)
+        val content = NotificationContent.transition(newPhase, localizedCopy(localizedContext))
 
         val notification = NotificationCompat.Builder(context, CHANNEL_TRANSITION)
             .setSmallIcon(R.drawable.ic_tile_timer)
@@ -91,6 +93,17 @@ class NotificationHelper @Inject constructor(
 
         manager.notify(NOTIFICATION_TRANSITION_ID, notification)
     }
+
+    private fun localizedCopy(context: Context) = NotificationCopy(
+        focusLabel = context.getString(R.string.phase_focus),
+        breakLabel = context.getString(R.string.phase_break),
+        timerTitleFormat = context.getString(R.string.notification_timer_title),
+        timerText = context.getString(R.string.notification_timer_text),
+        focusTransitionTitle = context.getString(R.string.notification_focus_start_title),
+        focusTransitionText = context.getString(R.string.notification_focus_start_text),
+        breakTransitionTitle = context.getString(R.string.notification_break_start_title),
+        breakTransitionText = context.getString(R.string.notification_break_start_text),
+    )
 
     companion object {
         const val CHANNEL_TIMER = "teamodoro_timer"

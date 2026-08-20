@@ -10,4 +10,14 @@
     <string name="settings_language_system_default">Язык системы</string>
     <string name="theme_switch_to_dark">Переключиться на тёмную тему</string>
     <string name="theme_switch_to_light">Переключиться на светлую тему</string>
+    <string name="notification_channel_timer_name">Таймер</string>
+    <string name="notification_channel_timer_description">Уведомление о работающем таймере</string>
+    <string name="notification_channel_transition_name">Смена фаз</string>
+    <string name="notification_channel_transition_description">Оповещения при смене фазы таймера</string>
+    <string name="notification_timer_title">%1$s — осталось %2$s</string>
+    <string name="notification_timer_text">Teamodoro запущен</string>
+    <string name="notification_focus_start_title">Время сосредоточиться!</string>
+    <string name="notification_focus_start_text">Началась 25-минутная сессия фокуса</string>
+    <string name="notification_break_start_title">Время отдохнуть!</string>
+    <string name="notification_break_start_text">Начался 5-минутный перерыв</string>
 </resources>
