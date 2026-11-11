@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(rm *)",
+      "Bash(git add -f *)",
+      "Bash(git push * main)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Read(**/*.jks)",
+      "Read(**/*.keystore)",
+      "Read(keystore.properties)",
+      "Edit(gradlew)",
+      "Edit(gradlew.bat)",
+      "Edit(gradle/wrapper/**)",
+      "Edit(local.properties)",
+      "Edit(app/build/**)",
+      "Edit(build/**)",
+      "Edit(.gradle/**)",
+      "Write(app/build/**)",
+      "Write(build/**)",
+      "Write(.gradle/**)"
+    ],
+    "allow": [
+      "Bash(./gradlew *)",
+      "Bash(adb install *)",
+      "Bash(adb devices)",
+      "Bash(adb logcat *)",
+      "Bash(gh pr *)",
+      "Bash(gh run *)"
+    ]
+  }
+}

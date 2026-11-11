@@ -50,3 +50,12 @@ RELEASING.md
 
 #common folder for temp actions
 common/
+
+# Claude Code: shared rules, skills and agents (unignore despite global gitignore)
+!.claude/
+!.claude/**
+.claude/settings.local.json
+
+# Software factory runtime state and worktrees
+/factory/jobs/
+/.worktrees/
