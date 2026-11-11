@@ -54,6 +54,7 @@ matters to you.
 
 - Material 3: adaptive dynamic color that changes the system theme based on the timer phase
 - Tiles: a custom Quick Settings tile to view remaining time at a glance from the notification shade
+- Guide: tapping the app title opens a short guide to how the clock-aligned cycle works
 
 ## Technical Stack
 

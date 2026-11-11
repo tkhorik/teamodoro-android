@@ -10,6 +10,12 @@
     <string name="settings_language_system_default">系統預設</string>
     <string name="theme_switch_to_dark">切換至深色主題</string>
     <string name="theme_switch_to_light">切換至淺色主題</string>
+    <string name="about_open_label">了解 Teamodoro 的運作方式</string>
+    <string name="about_dialog_title">Teamodoro 如何運作</string>
+    <string name="about_dialog_cycle">Teamodoro 不斷重複同一個週期：先專注 %1$d 分鐘，再休息 %2$d 分鐘，每 %3$d 分鐘一輪。</string>
+    <string name="about_dialog_clock">週期與時鐘對齊，每小時的 :00、:25、:30 和 :55 切換階段，因此所有使用 Teamodoro 的人在同一時間處於同一階段。</string>
+    <string name="about_dialog_notifications">週期始終在運行。提醒按鈕只會開啟或關閉本裝置上的階段提醒。</string>
+    <string name="about_dialog_confirm">知道了</string>
     <string name="notification_channel_timer_name">計時器</string>
     <string name="notification_channel_timer_description">進行中的計時器通知</string>
     <string name="notification_channel_transition_name">階段切換</string>

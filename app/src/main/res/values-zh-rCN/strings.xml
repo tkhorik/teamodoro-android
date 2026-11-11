@@ -10,6 +10,12 @@
     <string name="settings_language_system_default">系统默认</string>
     <string name="theme_switch_to_dark">切换到深色主题</string>
     <string name="theme_switch_to_light">切换到浅色主题</string>
+    <string name="about_open_label">了解 Teamodoro 的工作方式</string>
+    <string name="about_dialog_title">Teamodoro 如何运作</string>
+    <string name="about_dialog_cycle">Teamodoro 不断重复同一个周期：先专注 %1$d 分钟，再休息 %2$d 分钟，每 %3$d 分钟一轮。</string>
+    <string name="about_dialog_clock">周期与时钟对齐，每小时的 :00、:25、:30 和 :55 切换阶段，因此所有使用 Teamodoro 的人在同一时间处于同一阶段。</string>
+    <string name="about_dialog_notifications">周期始终在运行。提醒按钮只会开启或关闭本设备上的阶段提醒。</string>
+    <string name="about_dialog_confirm">知道了</string>
     <string name="notification_channel_timer_name">计时器</string>
     <string name="notification_channel_timer_description">正在运行的计时器通知</string>
     <string name="notification_channel_transition_name">阶段切换</string>

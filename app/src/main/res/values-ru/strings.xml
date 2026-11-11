@@ -10,6 +10,12 @@
     <string name="settings_language_system_default">Язык системы</string>
     <string name="theme_switch_to_dark">Переключиться на тёмную тему</string>
     <string name="theme_switch_to_light">Переключиться на светлую тему</string>
+    <string name="about_open_label">Узнать, как работает Teamodoro</string>
+    <string name="about_dialog_title">Как работает Teamodoro</string>
+    <string name="about_dialog_cycle">Teamodoro повторяет один цикл: фокус — %1$d мин., затем перерыв — %2$d мин., и так каждые %3$d мин.</string>
+    <string name="about_dialog_clock">Цикл привязан к часам: фазы меняются в :00, :25, :30 и :55 каждого часа, поэтому все, кто пользуется Teamodoro, находятся в одной и той же фазе одновременно.</string>
+    <string name="about_dialog_notifications">Цикл идёт всегда. Кнопка уведомлений лишь включает и выключает уведомления о фазах на этом устройстве.</string>
+    <string name="about_dialog_confirm">Понятно</string>
     <string name="notification_channel_timer_name">Таймер</string>
     <string name="notification_channel_timer_description">Уведомление о работающем таймере</string>
     <string name="notification_channel_transition_name">Смена фаз</string>

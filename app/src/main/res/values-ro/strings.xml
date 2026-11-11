@@ -10,6 +10,12 @@
     <string name="settings_language_system_default">Limba sistemului</string>
     <string name="theme_switch_to_dark">Comută la tema întunecată</string>
     <string name="theme_switch_to_light">Comută la tema luminoasă</string>
+    <string name="about_open_label">Află cum funcționează Teamodoro</string>
+    <string name="about_dialog_title">Cum funcționează Teamodoro</string>
+    <string name="about_dialog_cycle">Teamodoro repetă un ciclu: concentrare %1$d min., urmată de o pauză de %2$d min., la fiecare %3$d min.</string>
+    <string name="about_dialog_clock">Ciclul este legat de ceas, cu schimbări de fază la :00, :25, :30 și :55 ale fiecărei ore, astfel încât toți cei care folosesc Teamodoro sunt în aceeași fază în același timp.</string>
+    <string name="about_dialog_notifications">Ciclul rulează mereu. Butonul de notificări doar pornește și oprește notificările de fază pe acest dispozitiv.</string>
+    <string name="about_dialog_confirm">Am înțeles</string>
     <string name="notification_channel_timer_name">Cronometru</string>
     <string name="notification_channel_timer_description">Notificare pentru cronometrul activ</string>
     <string name="notification_channel_transition_name">Schimbări de fază</string>
