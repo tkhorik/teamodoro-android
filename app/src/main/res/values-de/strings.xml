@@ -10,6 +10,12 @@
     <string name="settings_language_system_default">Systemsprache</string>
     <string name="theme_switch_to_dark">Zum dunklen Design wechseln</string>
     <string name="theme_switch_to_light">Zum hellen Design wechseln</string>
+    <string name="about_open_label">Erfahren, wie Teamodoro funktioniert</string>
+    <string name="about_dialog_title">So funktioniert Teamodoro</string>
+    <string name="about_dialog_cycle">Teamodoro wiederholt einen Zyklus: %1$d Minuten Fokus, gefolgt von einer %2$d-minütigen Pause, alle %3$d Minuten.</string>
+    <string name="about_dialog_clock">Der Zyklus richtet sich nach der Uhr, mit Phasenwechseln um :00, :25, :30 und :55 jeder Stunde. So sind alle, die Teamodoro nutzen, zur gleichen Zeit in derselben Phase.</string>
+    <string name="about_dialog_notifications">Der Zyklus läuft immer. Die Benachrichtigungstaste schaltet nur die Phasenbenachrichtigungen auf diesem Gerät ein und aus.</string>
+    <string name="about_dialog_confirm">Verstanden</string>
     <string name="notification_channel_timer_name">Timer</string>
     <string name="notification_channel_timer_description">Laufende Timer-Benachrichtigung</string>
     <string name="notification_channel_transition_name">Phasenwechsel</string>

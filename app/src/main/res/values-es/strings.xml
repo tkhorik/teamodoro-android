@@ -10,6 +10,12 @@
     <string name="settings_language_system_default">Idioma del sistema</string>
     <string name="theme_switch_to_dark">Cambiar al tema oscuro</string>
     <string name="theme_switch_to_light">Cambiar al tema claro</string>
+    <string name="about_open_label">Descubre cómo funciona Teamodoro</string>
+    <string name="about_dialog_title">Cómo funciona Teamodoro</string>
+    <string name="about_dialog_cycle">Teamodoro repite un ciclo: %1$d minutos de concentración seguidos de un descanso de %2$d minutos, cada %3$d minutos.</string>
+    <string name="about_dialog_clock">El ciclo está ligado al reloj, con cambios de fase a las :00, :25, :30 y :55 de cada hora, así que todos los que usan Teamodoro están en la misma fase al mismo tiempo.</string>
+    <string name="about_dialog_notifications">El ciclo siempre está en marcha. El botón de notificaciones solo activa y desactiva las notificaciones de fase en este dispositivo.</string>
+    <string name="about_dialog_confirm">Entendido</string>
     <string name="notification_channel_timer_name">Temporizador</string>
     <string name="notification_channel_timer_description">Notificación del temporizador en curso</string>
     <string name="notification_channel_transition_name">Cambios de fase</string>

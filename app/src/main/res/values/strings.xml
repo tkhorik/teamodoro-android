@@ -13,6 +13,12 @@
     <string name="settings_language_system_default">System default</string>
     <string name="theme_switch_to_dark">Switch to dark theme</string>
     <string name="theme_switch_to_light">Switch to light theme</string>
+    <string name="about_open_label">Learn how Teamodoro works</string>
+    <string name="about_dialog_title">How Teamodoro works</string>
+    <string name="about_dialog_cycle">Teamodoro repeats a %3$d-minute cycle: a %1$d-minute focus period followed by a %2$d-minute break.</string>
+    <string name="about_dialog_clock">The cycle is tied to the clock, with phase changes at :00, :25, :30 and :55 of every hour, so everyone using Teamodoro is in the same phase at the same time.</string>
+    <string name="about_dialog_notifications">The cycle always runs. The notifications button only turns phase notifications on and off on this device.</string>
+    <string name="about_dialog_confirm">Got it</string>
 
     <string name="notification_channel_timer_name">Timer</string>
     <string name="notification_channel_timer_description">Ongoing timer notification</string>
