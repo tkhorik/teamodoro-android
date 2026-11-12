@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
@@ -47,10 +48,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.teamodoro.R
+import com.teamodoro.data.SoundEvent
+import com.teamodoro.data.TransitionSound
 import com.teamodoro.domain.TimerPhase
 import com.teamodoro.domain.TimerState
 import com.teamodoro.domain.ThemeMode
 import com.teamodoro.locale.LocaleManager
+import com.teamodoro.ui.SoundSettingsState
 import com.teamodoro.ui.theme.AppTheme
 import java.util.Locale
 
@@ -66,9 +70,12 @@ fun TimerScreen(
     onLanguageRowClick: () -> Unit,
     themeMode: ThemeMode,
     onThemeToggle: () -> Unit,
+    soundSettings: SoundSettingsState,
+    onSoundSelected: (SoundEvent, TransitionSound) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var showAbout by rememberSaveable { mutableStateOf(false) }
+    var showSoundSettings by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -85,6 +92,12 @@ fun TimerScreen(
                     )
                 },
                 actions = {
+                    IconButton(onClick = { showSoundSettings = true }) {
+                        Icon(
+                            imageVector = Icons.Default.MusicNote,
+                            contentDescription = stringResource(R.string.sound_settings_open),
+                        )
+                    }
                     ThemeToggleButton(
                         themeMode = themeMode,
                         onClick = onThemeToggle,
@@ -132,6 +145,14 @@ fun TimerScreen(
 
     if (showAbout) {
         AboutDialog(onDismiss = { showAbout = false })
+    }
+
+    if (showSoundSettings) {
+        SoundSettingsDialog(
+            state = soundSettings,
+            onSoundSelected = onSoundSelected,
+            onDismiss = { showSoundSettings = false },
+        )
     }
 }
 
@@ -310,6 +331,8 @@ private fun TimerScreenWorkPreview() {
             onLanguageRowClick = {},
             themeMode = ThemeMode.LIGHT,
             onThemeToggle = {},
+            soundSettings = SoundSettingsState(),
+            onSoundSelected = { _, _ -> },
         )
     }
 }
@@ -332,6 +355,8 @@ private fun TimerScreenBreakPreview() {
             onLanguageRowClick = {},
             themeMode = ThemeMode.DARK,
             onThemeToggle = {},
+            soundSettings = SoundSettingsState(),
+            onSoundSelected = { _, _ -> },
         )
     }
 }
@@ -358,6 +383,8 @@ private fun TimerScreenNarrowLongLabelPreview() {
             onLanguageRowClick = {},
             themeMode = ThemeMode.LIGHT,
             onThemeToggle = {},
+            soundSettings = SoundSettingsState(),
+            onSoundSelected = { _, _ -> },
         )
     }
 }
@@ -383,6 +410,8 @@ private fun TimerScreenNarrowSystemDefaultPreview() {
             onLanguageRowClick = {},
             themeMode = ThemeMode.LIGHT,
             onThemeToggle = {},
+            soundSettings = SoundSettingsState(),
+            onSoundSelected = { _, _ -> },
         )
     }
 }

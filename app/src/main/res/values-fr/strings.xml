@@ -16,6 +16,12 @@
     <string name="about_dialog_clock">Le cycle est calé sur l’horloge, avec des changements de phase à :00, :25, :30 et :55 de chaque heure : tous les utilisateurs de Teamodoro sont donc dans la même phase au même moment.</string>
     <string name="about_dialog_notifications">Le cycle tourne en permanence. Le bouton des notifications active ou désactive seulement les notifications de phase sur cet appareil.</string>
     <string name="about_dialog_confirm">Compris</string>
+    <string name="sound_settings_open">Sons de notification</string>
+    <string name="sound_settings_title">Sons de notification</string>
+    <string name="sound_focus_start">Son de début de concentration</string>
+    <string name="sound_focus_end">Son de fin de concentration</string>
+    <string name="sound_default">Par défaut</string>
+    <string name="sound_silent">Silencieux</string>
     <string name="notification_channel_timer_name">Minuteur</string>
     <string name="notification_channel_timer_description">Notification du minuteur en cours</string>
     <string name="notification_channel_transition_name">Changements de phase</string>

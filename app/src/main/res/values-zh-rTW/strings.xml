@@ -16,6 +16,12 @@
     <string name="about_dialog_clock">週期與時鐘對齊，每小時的 :00、:25、:30 和 :55 切換階段，因此所有使用 Teamodoro 的人在同一時間處於同一階段。</string>
     <string name="about_dialog_notifications">週期始終在運行。提醒按鈕只會開啟或關閉本裝置上的階段提醒。</string>
     <string name="about_dialog_confirm">知道了</string>
+    <string name="sound_settings_open">通知音效</string>
+    <string name="sound_settings_title">通知音效</string>
+    <string name="sound_focus_start">專注開始提示音</string>
+    <string name="sound_focus_end">專注結束提示音</string>
+    <string name="sound_default">預設</string>
+    <string name="sound_silent">靜音</string>
     <string name="notification_channel_timer_name">計時器</string>
     <string name="notification_channel_timer_description">進行中的計時器通知</string>
     <string name="notification_channel_transition_name">階段切換</string>
