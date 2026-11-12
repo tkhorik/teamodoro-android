@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,7 +28,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,6 +38,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -114,7 +121,7 @@ fun TimerScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                LanguageRow(
+                LanguagePill(
                     currentLanguageTag = currentLanguageTag,
                     supportedLanguages = supportedLanguages,
                     onClick = onLanguageRowClick,
@@ -215,21 +222,68 @@ private fun ControlButtons(
 }
 
 @Composable
-private fun LanguageRow(
+private fun LanguagePill(
     currentLanguageTag: String?,
     supportedLanguages: List<LocaleManager.AppLanguage>,
     onClick: () -> Unit,
 ) {
-    val label = supportedLanguages
-        .firstOrNull { it.tag == currentLanguageTag }
-        ?.displayName
-        ?: currentLanguageTag?.let { Locale.forLanguageTag(it).getDisplayName(Locale.forLanguageTag(it)) }
+    val label = resolveLanguageLabel(currentLanguageTag, supportedLanguages)
         ?: stringResource(R.string.settings_language_system_default)
+    val description = "${stringResource(R.string.settings_language_label)}: $label"
+    val colorScheme = MaterialTheme.colorScheme
 
-    TextButton(onClick = onClick) {
-        Text("${stringResource(R.string.settings_language_label)}: $label")
-    }
+    AssistChip(
+        onClick = onClick,
+        label = {
+            Text(
+                text = label,
+                // The chip's content description already announces the label.
+                modifier = Modifier.clearAndSetSemantics {},
+                maxLines = 1,
+                softWrap = false,
+            )
+        },
+        modifier = Modifier.semantics {
+            contentDescription = description
+            role = Role.Button
+        },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Language,
+                contentDescription = null,
+                modifier = Modifier.size(AssistChipDefaults.IconSize),
+            )
+        },
+        trailingIcon = {
+            Icon(
+                imageVector = Icons.Default.ArrowDropDown,
+                contentDescription = null,
+                modifier = Modifier.size(AssistChipDefaults.IconSize),
+            )
+        },
+        colors = AssistChipDefaults.assistChipColors(
+            labelColor = colorScheme.onSurfaceVariant,
+            leadingIconContentColor = colorScheme.onSurfaceVariant,
+            trailingIconContentColor = colorScheme.onSurfaceVariant,
+        ),
+        border = AssistChipDefaults.assistChipBorder(
+            enabled = true,
+            borderColor = colorScheme.outline,
+        ),
+    )
 }
+
+/**
+ * The current language's name in its own language, or null when the app follows
+ * the system language and the caller should show the "System default" string.
+ */
+internal fun resolveLanguageLabel(
+    currentLanguageTag: String?,
+    supportedLanguages: List<LocaleManager.AppLanguage>,
+): String? = supportedLanguages
+    .firstOrNull { it.tag == currentLanguageTag }
+    ?.displayName
+    ?: currentLanguageTag?.let { Locale.forLanguageTag(it).getDisplayName(Locale.forLanguageTag(it)) }
 
 private fun Long.toMinutesSeconds(): String {
     val totalSeconds = this / 1_000
@@ -277,6 +331,32 @@ private fun TimerScreenBreakPreview() {
             supportedLanguages = emptyList(),
             onLanguageRowClick = {},
             themeMode = ThemeMode.DARK,
+            onThemeToggle = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 320)
+@Composable
+private fun TimerScreenNarrowLongLabelPreview() {
+    AppTheme(phase = TimerPhase.WORK, themeMode = ThemeMode.LIGHT) {
+        TimerScreen(
+            state = TimerState(
+                phase = TimerPhase.WORK,
+                remainingMillis = 17 * 60 * 1000L,
+                cyclePosition = 8 * 60 * 1000L,
+            ),
+            isTracking = false,
+            onStart = {},
+            onStop = {},
+            currentLanguageTag = "uk",
+            supportedLanguages = listOf(
+                LocaleManager.AppLanguage(tag = null, displayName = null),
+                LocaleManager.AppLanguage(tag = "en", displayName = "English"),
+                LocaleManager.AppLanguage(tag = "uk", displayName = "Українська"),
+            ),
+            onLanguageRowClick = {},
+            themeMode = ThemeMode.LIGHT,
             onThemeToggle = {},
         )
     }
