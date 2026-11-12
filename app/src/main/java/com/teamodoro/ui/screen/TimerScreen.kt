@@ -6,11 +6,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DarkMode
@@ -28,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -72,6 +75,8 @@ fun TimerScreen(
     onThemeToggle: () -> Unit,
     soundSettings: SoundSettingsState,
     onSoundSelected: (SoundEvent, TransitionSound) -> Unit,
+    focusTickEnabled: Boolean,
+    onFocusTickToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var showAbout by rememberSaveable { mutableStateOf(false) }
@@ -133,6 +138,13 @@ fun TimerScreen(
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
+
+                FocusTickToggle(
+                    enabled = focusTickEnabled,
+                    onToggle = onFocusTickToggle,
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 LanguagePill(
                     currentLanguageTag = currentLanguageTag,
@@ -243,6 +255,41 @@ private fun ControlButtons(
 }
 
 @Composable
+private fun FocusTickToggle(
+    enabled: Boolean,
+    onToggle: (Boolean) -> Unit,
+) {
+    val description = stringResource(R.string.focus_tick_description)
+
+    // One touch and accessibility target: the row toggles, the Switch only shows.
+    Row(
+        modifier = Modifier
+            .toggleable(
+                value = enabled,
+                role = Role.Switch,
+                onValueChange = onToggle,
+            )
+            .semantics { contentDescription = description }
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.focus_tick_label),
+            // The row's content description already announces the label.
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .clearAndSetSemantics {},
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        Switch(
+            checked = enabled,
+            onCheckedChange = null,
+        )
+    }
+}
+
+@Composable
 private fun LanguagePill(
     currentLanguageTag: String?,
     supportedLanguages: List<LocaleManager.AppLanguage>,
@@ -333,6 +380,8 @@ private fun TimerScreenWorkPreview() {
             onThemeToggle = {},
             soundSettings = SoundSettingsState(),
             onSoundSelected = { _, _ -> },
+            focusTickEnabled = true,
+            onFocusTickToggle = {},
         )
     }
 }
@@ -357,6 +406,8 @@ private fun TimerScreenBreakPreview() {
             onThemeToggle = {},
             soundSettings = SoundSettingsState(),
             onSoundSelected = { _, _ -> },
+            focusTickEnabled = false,
+            onFocusTickToggle = {},
         )
     }
 }
@@ -385,6 +436,8 @@ private fun TimerScreenNarrowLongLabelPreview() {
             onThemeToggle = {},
             soundSettings = SoundSettingsState(),
             onSoundSelected = { _, _ -> },
+            focusTickEnabled = false,
+            onFocusTickToggle = {},
         )
     }
 }
@@ -412,6 +465,8 @@ private fun TimerScreenNarrowSystemDefaultPreview() {
             onThemeToggle = {},
             soundSettings = SoundSettingsState(),
             onSoundSelected = { _, _ -> },
+            focusTickEnabled = false,
+            onFocusTickToggle = {},
         )
     }
 }
