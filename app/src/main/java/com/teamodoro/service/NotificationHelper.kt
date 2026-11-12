@@ -33,16 +33,25 @@ class NotificationHelper @Inject constructor(
             setShowBadge(false)
         }
 
+        // A channel's sound is fixed once it exists, so the legacy channel (which
+        // has the system default sound) can't be made silent. Alerts live on a new
+        // silent channel instead; TransitionSoundPlayer plays the chosen sound. The
+        // new channel inherits the legacy importance so a user who blocked or
+        // silenced phase alerts keeps that choice. The importance is ignored once
+        // the new channel exists.
+        val legacyChannel = manager.getNotificationChannel(CHANNEL_TRANSITION_LEGACY)
         val transitionChannel = NotificationChannel(
             CHANNEL_TRANSITION,
             localizedContext.getString(R.string.notification_channel_transition_name),
-            NotificationManager.IMPORTANCE_HIGH,
+            legacyChannel?.importance ?: NotificationManager.IMPORTANCE_HIGH,
         ).apply {
             description = localizedContext.getString(R.string.notification_channel_transition_description)
+            setSound(null, null)
         }
 
         manager.createNotificationChannel(timerChannel)
         manager.createNotificationChannel(transitionChannel)
+        if (legacyChannel != null) manager.deleteNotificationChannel(CHANNEL_TRANSITION_LEGACY)
     }
 
     fun buildTimerNotification(state: TimerState): Notification {
@@ -107,7 +116,8 @@ class NotificationHelper @Inject constructor(
 
     companion object {
         const val CHANNEL_TIMER = "teamodoro_timer"
-        const val CHANNEL_TRANSITION = "teamodoro_transition"
+        const val CHANNEL_TRANSITION = "teamodoro_phase_alerts"
+        private const val CHANNEL_TRANSITION_LEGACY = "teamodoro_transition"
         const val NOTIFICATION_TIMER_ID = 1
         private const val NOTIFICATION_TRANSITION_ID = 2
     }
