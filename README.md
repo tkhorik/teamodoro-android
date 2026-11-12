@@ -50,6 +50,7 @@ matters to you.
 - Foreground Service: a sticky service with a low-priority notification to keep the timer running in the background
 - AlarmManager: exact triggers for transition alerts to wake the device if it enters Doze mode
 - Sounds: selectable focus start and focus end sounds, chosen from the system notification-sound picker (Default and Silent included); they stay quiet under Do Not Disturb and on vibrate or silent
+- Focus tick: an optional quiet tick every second during focus, off by default and set on the main screen; it plays only while notifications are on, and stays quiet under Do Not Disturb and on vibrate or silent
 
 ### UI/UX
 
@@ -64,11 +65,12 @@ matters to you.
 | Language | Kotlin 2.1+ |
 | UI Framework | Jetpack Compose |
 | Asynchrony | Kotlin Coroutines & Flow |
-| Persistence | SharedPreferences (a boolean and two sound choices — see below) |
+| Persistence | SharedPreferences (a boolean, two sound choices and a tick toggle — see below) |
 | DI | Hilt |
 
 The durable state is whether the user has switched notifications on and which
-sound they chose for focus start and focus end. The cycle itself is derived
+sound they chose for focus start and focus end, and whether the optional focus
+tick is on. The cycle itself is derived
 from the clock and needs no storage, so there is no database, no schema
 and no migration path to maintain.
 
