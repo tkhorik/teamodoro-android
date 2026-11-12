@@ -262,13 +262,13 @@ private fun LanguagePill(
             )
         },
         colors = AssistChipDefaults.assistChipColors(
-            labelColor = colorScheme.onSurfaceVariant,
-            leadingIconContentColor = colorScheme.onSurfaceVariant,
-            trailingIconContentColor = colorScheme.onSurfaceVariant,
+            labelColor = colorScheme.onSurface,
+            leadingIconContentColor = colorScheme.onSurface,
+            trailingIconContentColor = colorScheme.onSurface,
         ),
         border = AssistChipDefaults.assistChipBorder(
             enabled = true,
-            borderColor = colorScheme.outline,
+            borderColor = colorScheme.onSurface.copy(alpha = 0.38f),
         ),
     )
 }
@@ -354,6 +354,31 @@ private fun TimerScreenNarrowLongLabelPreview() {
                 LocaleManager.AppLanguage(tag = null, displayName = null),
                 LocaleManager.AppLanguage(tag = "en", displayName = "English"),
                 LocaleManager.AppLanguage(tag = "uk", displayName = "Українська"),
+            ),
+            onLanguageRowClick = {},
+            themeMode = ThemeMode.LIGHT,
+            onThemeToggle = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 320, locale = "es")
+@Composable
+private fun TimerScreenNarrowSystemDefaultPreview() {
+    AppTheme(phase = TimerPhase.BREAK, themeMode = ThemeMode.LIGHT) {
+        TimerScreen(
+            state = TimerState(
+                phase = TimerPhase.BREAK,
+                remainingMillis = 3 * 60 * 1000L,
+                cyclePosition = 27 * 60 * 1000L,
+            ),
+            isTracking = true,
+            onStart = {},
+            onStop = {},
+            currentLanguageTag = null,
+            supportedLanguages = listOf(
+                LocaleManager.AppLanguage(tag = null, displayName = null),
+                LocaleManager.AppLanguage(tag = "es", displayName = "Español"),
             ),
             onLanguageRowClick = {},
             themeMode = ThemeMode.LIGHT,
