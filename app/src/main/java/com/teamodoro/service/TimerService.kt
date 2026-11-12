@@ -5,6 +5,7 @@ import android.content.pm.ServiceInfo
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.teamodoro.data.SoundEvent
 import com.teamodoro.data.TimerPreferences
 import com.teamodoro.domain.CYCLE_MILLIS
 import com.teamodoro.domain.CalculateTimerUseCase
@@ -30,6 +31,9 @@ class TimerService : LifecycleService() {
 
     @Inject
     lateinit var preferences: TimerPreferences
+
+    @Inject
+    lateinit var transitionSoundPlayer: TransitionSoundPlayer
 
     private var timerJob: Job? = null
 
@@ -125,6 +129,7 @@ class TimerService : LifecycleService() {
         if (id == lastAlertedTransitionId) return
         lastAlertedTransitionId = id
         notificationHelper.showTransitionNotification(state.phase)
+        transitionSoundPlayer.play(SoundEvent.forPhase(state.phase))
         // Keep the alarm chain alive even if a previous one was dropped.
         armAlarm(nowMillis)
     }

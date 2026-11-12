@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: TimerViewModel by viewModels()
     private val themeViewModel: ThemeViewModel by viewModels()
+    private val soundSettingsViewModel: SoundSettingsViewModel by viewModels()
 
     private val notificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
@@ -44,6 +45,7 @@ class MainActivity : AppCompatActivity() {
             val isTracking by viewModel.isTracking.collectAsStateWithLifecycle()
             val currentLanguageTag by viewModel.currentLanguageTag.collectAsStateWithLifecycle()
             val themeMode by themeViewModel.themeMode.collectAsStateWithLifecycle()
+            val soundSettings by soundSettingsViewModel.state.collectAsStateWithLifecycle()
             var showLanguageDialog by remember { mutableStateOf(false) }
 
             AppTheme(phase = state.phase, themeMode = themeMode) {
@@ -67,6 +69,8 @@ class MainActivity : AppCompatActivity() {
                     },
                     themeMode = themeMode,
                     onThemeToggle = themeViewModel::toggleTheme,
+                    soundSettings = soundSettings,
+                    onSoundSelected = soundSettingsViewModel::setSound,
                 )
 
                 if (showLanguageDialog) {

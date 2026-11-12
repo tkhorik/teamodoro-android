@@ -16,6 +16,12 @@
     <string name="about_dialog_clock">Цикл привязан к часам: фазы меняются в :00, :25, :30 и :55 каждого часа, поэтому все, кто пользуется Teamodoro, находятся в одной и той же фазе одновременно.</string>
     <string name="about_dialog_notifications">Цикл идёт всегда. Кнопка уведомлений лишь включает и выключает уведомления о фазах на этом устройстве.</string>
     <string name="about_dialog_confirm">Понятно</string>
+    <string name="sound_settings_open">Звуки уведомлений</string>
+    <string name="sound_settings_title">Звуки уведомлений</string>
+    <string name="sound_focus_start">Звук начала фокуса</string>
+    <string name="sound_focus_end">Звук конца фокуса</string>
+    <string name="sound_default">По умолчанию</string>
+    <string name="sound_silent">Без звука</string>
     <string name="notification_channel_timer_name">Таймер</string>
     <string name="notification_channel_timer_description">Уведомление о работающем таймере</string>
     <string name="notification_channel_transition_name">Смена фаз</string>
