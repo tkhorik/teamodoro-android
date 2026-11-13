@@ -32,4 +32,6 @@
     <string name="notification_focus_start_text">Началась 25-минутная сессия фокуса</string>
     <string name="notification_break_start_title">Время отдохнуть!</string>
     <string name="notification_break_start_text">Начался 5-минутный перерыв</string>
+    <string name="focus_tick_label">Тиканье во время фокуса</string>
+    <string name="focus_tick_description">Звук тиканья во время фокуса: тихо тикает каждую секунду, пока включены уведомления о фазах</string>
 </resources>

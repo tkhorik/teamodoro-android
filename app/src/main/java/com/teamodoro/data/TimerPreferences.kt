@@ -11,15 +11,16 @@ import javax.inject.Singleton
 
 /**
  * Whether the user has switched tracking on. The other durable state is the
- * sound choices in [SoundPreferences].
+ * sound choices and the focus tick setting in [SoundPreferences].
  *
  * The cycle itself needs no persistence — it is derived from the clock. This
  * flag only records whether the foreground service and its ongoing notification
  * should be running, so the UI, the QS tile and [com.teamodoro.service.BootReceiver]
  * agree after a process death or a reboot.
  *
- * SharedPreferences rather than Room deliberately: a boolean and two sound
- * choices do not justify a database, a DAO, a schema version or a migration path.
+ * SharedPreferences rather than Room deliberately: a boolean, two sound
+ * choices and a tick toggle do not justify a database, a DAO, a schema version
+ * or a migration path.
  */
 @Singleton
 class TimerPreferences @Inject constructor(

@@ -32,4 +32,6 @@
     <string name="notification_focus_start_text">Розпочато 25-хвилинну сесію фокусу</string>
     <string name="notification_break_start_title">Час відпочити!</string>
     <string name="notification_break_start_text">Розпочато 5-хвилинну перерву</string>
+    <string name="focus_tick_label">Цокання під час фокусу</string>
+    <string name="focus_tick_description">Звук цокання під час фокусу: тихо цокає щосекунди, поки ввімкнено сповіщення про фази</string>
 </resources>

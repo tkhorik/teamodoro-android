@@ -32,4 +32,6 @@
     <string name="notification_focus_start_text">25-minütige Fokussitzung gestartet</string>
     <string name="notification_break_start_title">Zeit für eine Pause!</string>
     <string name="notification_break_start_text">5-minütige Pause gestartet</string>
+    <string name="focus_tick_label">Ticken im Fokus</string>
+    <string name="focus_tick_description">Tickgeräusch im Fokus: spielt jede Sekunde ein leises Ticken, solange die Phasenbenachrichtigungen aktiv sind</string>
 </resources>

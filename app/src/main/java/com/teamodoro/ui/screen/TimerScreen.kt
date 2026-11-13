@@ -5,12 +5,19 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DarkMode
@@ -28,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -72,6 +80,8 @@ fun TimerScreen(
     onThemeToggle: () -> Unit,
     soundSettings: SoundSettingsState,
     onSoundSelected: (SoundEvent, TransitionSound) -> Unit,
+    focusTickEnabled: Boolean,
+    onFocusTickToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var showAbout by rememberSaveable { mutableStateOf(false) }
@@ -110,35 +120,52 @@ fun TimerScreen(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
-            Column(
+            // Scrollable so every control stays reachable on short windows,
+            // landscape and large font scales. The minimum height keeps the
+            // content centred when it does fit.
+            BoxWithConstraints(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
+                    .padding(innerPadding),
             ) {
-                PhaseLabel(phase = state.phase)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = maxHeight)
+                        .verticalScroll(rememberScrollState())
+                        .padding(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    PhaseLabel(phase = state.phase)
 
-                Spacer(modifier = Modifier.height(40.dp))
+                    Spacer(modifier = Modifier.height(40.dp))
 
-                TimerRing(state = state)
+                    TimerRing(state = state)
 
-                Spacer(modifier = Modifier.height(48.dp))
+                    Spacer(modifier = Modifier.height(48.dp))
 
-                ControlButtons(
-                    isTracking = isTracking,
-                    onStart = onStart,
-                    onStop = onStop,
-                )
+                    ControlButtons(
+                        isTracking = isTracking,
+                        onStart = onStart,
+                        onStop = onStop,
+                    )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                LanguagePill(
-                    currentLanguageTag = currentLanguageTag,
-                    supportedLanguages = supportedLanguages,
-                    onClick = onLanguageRowClick,
-                )
+                    FocusTickToggle(
+                        enabled = focusTickEnabled,
+                        onToggle = onFocusTickToggle,
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    LanguagePill(
+                        currentLanguageTag = currentLanguageTag,
+                        supportedLanguages = supportedLanguages,
+                        onClick = onLanguageRowClick,
+                    )
+                }
             }
         }
     }
@@ -243,6 +270,41 @@ private fun ControlButtons(
 }
 
 @Composable
+private fun FocusTickToggle(
+    enabled: Boolean,
+    onToggle: (Boolean) -> Unit,
+) {
+    val description = stringResource(R.string.focus_tick_description)
+
+    // One touch and accessibility target: the row toggles, the Switch only shows.
+    Row(
+        modifier = Modifier
+            .toggleable(
+                value = enabled,
+                role = Role.Switch,
+                onValueChange = onToggle,
+            )
+            .semantics { contentDescription = description }
+            .heightIn(min = 48.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.focus_tick_label),
+            // The row's content description already announces the label.
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .clearAndSetSemantics {},
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        Switch(
+            checked = enabled,
+            onCheckedChange = null,
+        )
+    }
+}
+
+@Composable
 private fun LanguagePill(
     currentLanguageTag: String?,
     supportedLanguages: List<LocaleManager.AppLanguage>,
@@ -333,6 +395,8 @@ private fun TimerScreenWorkPreview() {
             onThemeToggle = {},
             soundSettings = SoundSettingsState(),
             onSoundSelected = { _, _ -> },
+            focusTickEnabled = true,
+            onFocusTickToggle = {},
         )
     }
 }
@@ -357,6 +421,8 @@ private fun TimerScreenBreakPreview() {
             onThemeToggle = {},
             soundSettings = SoundSettingsState(),
             onSoundSelected = { _, _ -> },
+            focusTickEnabled = false,
+            onFocusTickToggle = {},
         )
     }
 }
@@ -385,6 +451,8 @@ private fun TimerScreenNarrowLongLabelPreview() {
             onThemeToggle = {},
             soundSettings = SoundSettingsState(),
             onSoundSelected = { _, _ -> },
+            focusTickEnabled = false,
+            onFocusTickToggle = {},
         )
     }
 }
@@ -412,6 +480,34 @@ private fun TimerScreenNarrowSystemDefaultPreview() {
             onThemeToggle = {},
             soundSettings = SoundSettingsState(),
             onSoundSelected = { _, _ -> },
+            focusTickEnabled = false,
+            onFocusTickToggle = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 640)
+@Composable
+private fun TimerScreenShortPreview() {
+    AppTheme(phase = TimerPhase.WORK, themeMode = ThemeMode.LIGHT) {
+        TimerScreen(
+            state = TimerState(
+                phase = TimerPhase.WORK,
+                remainingMillis = 17 * 60 * 1000L,
+                cyclePosition = 8 * 60 * 1000L,
+            ),
+            isTracking = true,
+            onStart = {},
+            onStop = {},
+            currentLanguageTag = null,
+            supportedLanguages = emptyList(),
+            onLanguageRowClick = {},
+            themeMode = ThemeMode.LIGHT,
+            onThemeToggle = {},
+            soundSettings = SoundSettingsState(),
+            onSoundSelected = { _, _ -> },
+            focusTickEnabled = false,
+            onFocusTickToggle = {},
         )
     }
 }

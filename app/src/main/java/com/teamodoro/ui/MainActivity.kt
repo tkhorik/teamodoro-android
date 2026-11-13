@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
             val currentLanguageTag by viewModel.currentLanguageTag.collectAsStateWithLifecycle()
             val themeMode by themeViewModel.themeMode.collectAsStateWithLifecycle()
             val soundSettings by soundSettingsViewModel.state.collectAsStateWithLifecycle()
+            val focusTickEnabled by soundSettingsViewModel.focusTickEnabled.collectAsStateWithLifecycle()
             var showLanguageDialog by remember { mutableStateOf(false) }
 
             AppTheme(phase = state.phase, themeMode = themeMode) {
@@ -71,6 +72,8 @@ class MainActivity : AppCompatActivity() {
                     onThemeToggle = themeViewModel::toggleTheme,
                     soundSettings = soundSettings,
                     onSoundSelected = soundSettingsViewModel::setSound,
+                    focusTickEnabled = focusTickEnabled,
+                    onFocusTickToggle = soundSettingsViewModel::setFocusTickEnabled,
                 )
 
                 if (showLanguageDialog) {

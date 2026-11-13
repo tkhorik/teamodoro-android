@@ -56,6 +56,17 @@ class SoundSettingsViewModel @Inject constructor(
             initialValue = SoundSettingsState(),
         )
 
+    val focusTickEnabled: StateFlow<Boolean> = soundPreferences.focusTickEnabledFlow
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = soundPreferences.isFocusTickEnabled(),
+        )
+
+    fun setFocusTickEnabled(enabled: Boolean) {
+        soundPreferences.setFocusTickEnabled(enabled)
+    }
+
     fun setSound(event: SoundEvent, sound: TransitionSound) {
         soundPreferences.set(event, sound)
     }

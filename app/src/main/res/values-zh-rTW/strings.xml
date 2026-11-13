@@ -32,4 +32,6 @@
     <string name="notification_focus_start_text">已開始 25 分鐘專注時段</string>
     <string name="notification_break_start_title">休息一下！</string>
     <string name="notification_break_start_text">已開始 5 分鐘休息時段</string>
+    <string name="focus_tick_label">專注時滴答聲</string>
+    <string name="focus_tick_description">專注時的滴答聲：開啟階段通知時，每秒播放一次輕柔的滴答聲</string>
 </resources>

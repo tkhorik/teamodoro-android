@@ -36,4 +36,6 @@
     <string name="notification_focus_start_text">25-minute focus session started</string>
     <string name="notification_break_start_title">Take a break!</string>
     <string name="notification_break_start_text">5-minute break started</string>
+    <string name="focus_tick_label">Tick during focus</string>
+    <string name="focus_tick_description">Tick sound during focus: plays a quiet tick every second while phase notifications are on</string>
 </resources>

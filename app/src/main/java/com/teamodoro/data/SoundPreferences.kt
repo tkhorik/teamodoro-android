@@ -21,17 +21,21 @@ data class SoundChoices(
 }
 
 /**
- * The sound the user picked for each phase boundary.
+ * The sound the user picked for each phase boundary, and whether the quiet tick
+ * plays every second during focus (off by default).
  *
- * SharedPreferences, like [TimerPreferences]: the service reads the choice
- * synchronously while posting a notification, which DataStore can't do.
+ * SharedPreferences, like [TimerPreferences]: the service reads these
+ * synchronously while posting a notification or on each tick, which DataStore
+ * can't do.
  */
 @Singleton
-class SoundPreferences @Inject constructor(
-    @ApplicationContext context: Context,
+class SoundPreferences internal constructor(
+    private val prefs: SharedPreferences,
 ) {
-    private val prefs: SharedPreferences =
-        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    @Inject
+    constructor(@ApplicationContext context: Context) : this(
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE),
+    )
 
     fun get(event: SoundEvent): TransitionSound =
         TransitionSoundRules.decode(prefs.getString(keyFor(event), null))
@@ -50,6 +54,23 @@ class SoundPreferences @Inject constructor(
         awaitClose { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
     }
 
+    /** Whether the focus tick is on. Read fresh each second by the service. */
+    fun isFocusTickEnabled(): Boolean = prefs.getBoolean(KEY_FOCUS_TICK, false)
+
+    fun setFocusTickEnabled(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_FOCUS_TICK, enabled).apply()
+    }
+
+    /** Emits the current focus-tick setting immediately, then on every change. */
+    val focusTickEnabledFlow: Flow<Boolean> = callbackFlow {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == KEY_FOCUS_TICK) trySend(isFocusTickEnabled())
+        }
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+        trySend(isFocusTickEnabled())
+        awaitClose { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
+    }
+
     private fun currentChoices() = SoundChoices(
         focusStart = get(SoundEvent.FOCUS_START),
         focusEnd = get(SoundEvent.FOCUS_END),
@@ -64,5 +85,6 @@ class SoundPreferences @Inject constructor(
         const val PREFS_NAME = "teamodoro_sound_prefs"
         const val KEY_FOCUS_START = "focus_start_sound"
         const val KEY_FOCUS_END = "focus_end_sound"
+        const val KEY_FOCUS_TICK = "focus_tick_enabled"
     }
 }

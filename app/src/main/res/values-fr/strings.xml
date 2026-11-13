@@ -32,4 +32,6 @@
     <string name="notification_focus_start_text">Session de concentration de 25 minutes commencée</string>
     <string name="notification_break_start_title">Faites une pause !</string>
     <string name="notification_break_start_text">Pause de 5 minutes commencée</string>
+    <string name="focus_tick_label">Tic-tac pendant la concentration</string>
+    <string name="focus_tick_description">Tic-tac pendant la concentration : joue un tic discret chaque seconde tant que les notifications de phase sont activées</string>
 </resources>

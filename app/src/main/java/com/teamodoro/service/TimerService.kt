@@ -1,11 +1,14 @@
 package com.teamodoro.service
 
+import android.app.NotificationManager
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.media.AudioManager
 import androidx.core.app.ServiceCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.teamodoro.data.SoundEvent
+import com.teamodoro.data.SoundPreferences
 import com.teamodoro.data.TimerPreferences
 import com.teamodoro.domain.CYCLE_MILLIS
 import com.teamodoro.domain.CalculateTimerUseCase
@@ -34,6 +37,12 @@ class TimerService : LifecycleService() {
 
     @Inject
     lateinit var transitionSoundPlayer: TransitionSoundPlayer
+
+    @Inject
+    lateinit var tickSoundPlayer: TickSoundPlayer
+
+    @Inject
+    lateinit var soundPreferences: SoundPreferences
 
     private var timerJob: Job? = null
 
@@ -96,6 +105,7 @@ class TimerService : LifecycleService() {
         preferences.isTracking = false
         timerJob?.cancel()
         timerJob = null
+        tickSoundPlayer.release()
         alarmScheduler.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
@@ -104,6 +114,21 @@ class TimerService : LifecycleService() {
     private fun onTick(state: TimerState) {
         updateNotification(state)
         alertIfTransitionUnseen(System.currentTimeMillis(), state)
+        tickIfDue(state)
+    }
+
+    /** Plays the focus tick from the same one-second flow; no separate timer. */
+    private fun tickIfDue(state: TimerState) {
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        val due = TickSoundPolicy.shouldTick(
+            enabled = soundPreferences.isFocusTickEnabled(),
+            isTracking = preferences.isTracking,
+            phase = state.phase,
+            interruptionFilter = notificationManager.currentInterruptionFilter,
+            ringerMode = audioManager.ringerMode,
+        )
+        if (due) tickSoundPlayer.tick()
     }
 
     /**
@@ -152,6 +177,7 @@ class TimerService : LifecycleService() {
 
     override fun onDestroy() {
         timerJob?.cancel()
+        tickSoundPlayer.release()
         super.onDestroy()
     }
 
