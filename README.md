@@ -50,6 +50,7 @@ matters to you.
 - Foreground Service: a sticky service with a low-priority notification to keep the timer running in the background
 - AlarmManager: exact triggers for transition alerts to wake the device if it enters Doze mode
 - Sounds: selectable focus start and focus end sounds, chosen from the system notification-sound picker (Default and Silent included); they stay quiet under Do Not Disturb and on vibrate or silent
+- Settings: the top-bar Settings dialog contains notification-sound choices and app-language selection. Language selection opens Android per-app language settings on API 33+, and an in-app picker on API 26–32.
 - Focus tick: an optional quiet tick every second during focus, off by default and set on the main screen; it plays only while notifications are on, and stays quiet under Do Not Disturb and on vibrate or silent
 
 ### UI/UX

@@ -16,6 +16,8 @@
     <string name="about_dialog_clock">周期与时钟对齐，每小时的 :00、:25、:30 和 :55 切换阶段，因此所有使用 Teamodoro 的人在同一时间处于同一阶段。</string>
     <string name="about_dialog_notifications">周期始终在运行。提醒按钮只会开启或关闭本设备上的阶段提醒。</string>
     <string name="about_dialog_confirm">知道了</string>
+    <string name="settings_open">设置</string>
+    <string name="settings_title">设置</string>
     <string name="sound_settings_open">通知声音</string>
     <string name="sound_settings_title">通知声音</string>
     <string name="sound_focus_start">专注开始提示音</string>

@@ -19,13 +19,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material.icons.filled.MusicNote
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,8 +43,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -64,7 +60,6 @@ import com.teamodoro.domain.ThemeMode
 import com.teamodoro.locale.LocaleManager
 import com.teamodoro.ui.SoundSettingsState
 import com.teamodoro.ui.theme.AppTheme
-import java.util.Locale
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,7 +80,7 @@ fun TimerScreen(
     modifier: Modifier = Modifier,
 ) {
     var showAbout by rememberSaveable { mutableStateOf(false) }
-    var showSoundSettings by rememberSaveable { mutableStateOf(false) }
+    var showSettings by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -102,10 +97,10 @@ fun TimerScreen(
                     )
                 },
                 actions = {
-                    IconButton(onClick = { showSoundSettings = true }) {
+                    IconButton(onClick = { showSettings = true }) {
                         Icon(
-                            imageVector = Icons.Default.MusicNote,
-                            contentDescription = stringResource(R.string.sound_settings_open),
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = stringResource(R.string.settings_open),
                         )
                     }
                     ThemeToggleButton(
@@ -158,13 +153,6 @@ fun TimerScreen(
                         onToggle = onFocusTickToggle,
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    LanguagePill(
-                        currentLanguageTag = currentLanguageTag,
-                        supportedLanguages = supportedLanguages,
-                        onClick = onLanguageRowClick,
-                    )
                 }
             }
         }
@@ -174,11 +162,17 @@ fun TimerScreen(
         AboutDialog(onDismiss = { showAbout = false })
     }
 
-    if (showSoundSettings) {
-        SoundSettingsDialog(
+    if (showSettings) {
+        SettingsDialog(
             state = soundSettings,
+            currentLanguageTag = currentLanguageTag,
+            supportedLanguages = supportedLanguages,
             onSoundSelected = onSoundSelected,
-            onDismiss = { showSoundSettings = false },
+            onLanguageClick = {
+                showSettings = false
+                onLanguageRowClick()
+            },
+            onDismiss = { showSettings = false },
         )
     }
 }
@@ -304,70 +298,6 @@ private fun FocusTickToggle(
     }
 }
 
-@Composable
-private fun LanguagePill(
-    currentLanguageTag: String?,
-    supportedLanguages: List<LocaleManager.AppLanguage>,
-    onClick: () -> Unit,
-) {
-    val label = resolveLanguageLabel(currentLanguageTag, supportedLanguages)
-        ?: stringResource(R.string.settings_language_system_default)
-    val description = "${stringResource(R.string.settings_language_label)}: $label"
-    val colorScheme = MaterialTheme.colorScheme
-
-    AssistChip(
-        onClick = onClick,
-        label = {
-            Text(
-                text = label,
-                // The chip's content description already announces the label.
-                modifier = Modifier.clearAndSetSemantics {},
-                maxLines = 1,
-                softWrap = false,
-            )
-        },
-        modifier = Modifier.semantics {
-            contentDescription = description
-            role = Role.Button
-        },
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.Language,
-                contentDescription = null,
-                modifier = Modifier.size(AssistChipDefaults.IconSize),
-            )
-        },
-        trailingIcon = {
-            Icon(
-                imageVector = Icons.Default.ArrowDropDown,
-                contentDescription = null,
-                modifier = Modifier.size(AssistChipDefaults.IconSize),
-            )
-        },
-        colors = AssistChipDefaults.assistChipColors(
-            labelColor = colorScheme.onSurface,
-            leadingIconContentColor = colorScheme.onSurface,
-            trailingIconContentColor = colorScheme.onSurface,
-        ),
-        border = AssistChipDefaults.assistChipBorder(
-            enabled = true,
-            borderColor = colorScheme.onSurface.copy(alpha = 0.38f),
-        ),
-    )
-}
-
-/**
- * The current language's name in its own language, or null when the app follows
- * the system language and the caller should show the "System default" string.
- */
-internal fun resolveLanguageLabel(
-    currentLanguageTag: String?,
-    supportedLanguages: List<LocaleManager.AppLanguage>,
-): String? = supportedLanguages
-    .firstOrNull { it.tag == currentLanguageTag }
-    ?.displayName
-    ?: currentLanguageTag?.let { Locale.forLanguageTag(it).getDisplayName(Locale.forLanguageTag(it)) }
-
 private fun Long.toMinutesSeconds(): String {
     val totalSeconds = this / 1_000
     val minutes = totalSeconds / 60
@@ -418,65 +348,6 @@ private fun TimerScreenBreakPreview() {
             supportedLanguages = emptyList(),
             onLanguageRowClick = {},
             themeMode = ThemeMode.DARK,
-            onThemeToggle = {},
-            soundSettings = SoundSettingsState(),
-            onSoundSelected = { _, _ -> },
-            focusTickEnabled = false,
-            onFocusTickToggle = {},
-        )
-    }
-}
-
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-private fun TimerScreenNarrowLongLabelPreview() {
-    AppTheme(phase = TimerPhase.WORK, themeMode = ThemeMode.LIGHT) {
-        TimerScreen(
-            state = TimerState(
-                phase = TimerPhase.WORK,
-                remainingMillis = 17 * 60 * 1000L,
-                cyclePosition = 8 * 60 * 1000L,
-            ),
-            isTracking = false,
-            onStart = {},
-            onStop = {},
-            currentLanguageTag = "uk",
-            supportedLanguages = listOf(
-                LocaleManager.AppLanguage(tag = null, displayName = null),
-                LocaleManager.AppLanguage(tag = "en", displayName = "English"),
-                LocaleManager.AppLanguage(tag = "uk", displayName = "Українська"),
-            ),
-            onLanguageRowClick = {},
-            themeMode = ThemeMode.LIGHT,
-            onThemeToggle = {},
-            soundSettings = SoundSettingsState(),
-            onSoundSelected = { _, _ -> },
-            focusTickEnabled = false,
-            onFocusTickToggle = {},
-        )
-    }
-}
-
-@Preview(showBackground = true, widthDp = 320, locale = "es")
-@Composable
-private fun TimerScreenNarrowSystemDefaultPreview() {
-    AppTheme(phase = TimerPhase.BREAK, themeMode = ThemeMode.LIGHT) {
-        TimerScreen(
-            state = TimerState(
-                phase = TimerPhase.BREAK,
-                remainingMillis = 3 * 60 * 1000L,
-                cyclePosition = 27 * 60 * 1000L,
-            ),
-            isTracking = true,
-            onStart = {},
-            onStop = {},
-            currentLanguageTag = null,
-            supportedLanguages = listOf(
-                LocaleManager.AppLanguage(tag = null, displayName = null),
-                LocaleManager.AppLanguage(tag = "es", displayName = "Español"),
-            ),
-            onLanguageRowClick = {},
-            themeMode = ThemeMode.LIGHT,
             onThemeToggle = {},
             soundSettings = SoundSettingsState(),
             onSoundSelected = { _, _ -> },

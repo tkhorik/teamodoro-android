@@ -16,6 +16,8 @@
     <string name="about_dialog_clock">Ciclul este legat de ceas, cu schimbări de fază la :00, :25, :30 și :55 ale fiecărei ore, astfel încât toți cei care folosesc Teamodoro sunt în aceeași fază în același timp.</string>
     <string name="about_dialog_notifications">Ciclul rulează mereu. Butonul de notificări doar pornește și oprește notificările de fază pe acest dispozitiv.</string>
     <string name="about_dialog_confirm">Am înțeles</string>
+    <string name="settings_open">Setări</string>
+    <string name="settings_title">Setări</string>
     <string name="sound_settings_open">Sunete de notificare</string>
     <string name="sound_settings_title">Sunete de notificare</string>
     <string name="sound_focus_start">Sunet la începutul concentrării</string>
