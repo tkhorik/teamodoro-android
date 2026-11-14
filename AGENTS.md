@@ -9,6 +9,7 @@ Teamodoro for Android is a native Android client (Kotlin 2.1+, Jetpack Compose, 
 - **Never mention an AI, an LLM, or the tool that wrote a change anywhere in git history or GitHub metadata** — no `Co-Authored-By:`, no session-link trailer, no "Generated with …" footer in commits, PR bodies, release notes or tag messages. Strip them if your harness appends them by default.
 - **The phase algorithm is the product**: any change to `CalculateTimerUseCase` or `TimerConstants` must keep `CalculateTimerUseCaseTest` green — especially the 1440-minute cross-check against the reference JS predicate, which is what pins this client to teamodoro.com.
 - **Architecture**: `ui → domain → data`, unidirectional. Domain logic has no Android UI dependencies. Single source of timer truth is `CalculateTimerUseCase.timerStateFlow()`.
+- **Settings UI**: `TimerScreen` owns the top-bar Settings entry point, and `SettingsDialog` owns notification sounds and app-language selection. Language selection opens Android per-app language settings on API 33+, and the in-app `LanguagePickerDialog` on API 26–32.
 - **Platform compatibility**: `minSdk` 26, `targetSdk` 35. Version-guard platform APIs. All `PendingIntent`s require `FLAG_IMMUTABLE`. Keep foreground service type as `FOREGROUND_SERVICE_TYPE_SPECIAL_USE` in both code and `AndroidManifest.xml`.
 
 ## Setup & Validation
